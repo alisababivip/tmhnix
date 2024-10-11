@@ -1,1 +1,0 @@
-import{_ as e}from"./cancel.vue-GPyn0mBs.js";import{a as t,O as a,o as s}from"../e/entry-8qgg5CL-.js";const r=t({__name:"cancel",setup:t=>(t,r)=>{const o=e;return s(),a(o,{flutter:!1})}});export{r as default};

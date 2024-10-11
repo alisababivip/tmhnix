@@ -1,1 +1,0 @@
-import{_ as t}from"./NavigationLayout.vue-0hseK8f1.js";import{y as o,O as s,w as a,o as e,j as r}from"../e/entry-8qgg5CL-.js";import"./BaseButtonIcon.vue-6tAU_b7C.js";import"./sidebar-HzXC5Nkl.js";const n=o({},[["render",function(o,n){const u=t;return e(),s(u,null,{default:a((()=>[r(o.$slots,"default")])),_:3})}]]);export{n as default};
