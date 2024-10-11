@@ -1,0 +1,1 @@
+import{y as e,o as s,b as t,f as a,j as l}from"../e/entry-8qgg5CL-.js";const r={class:"relative"},d={class:"hidden justify-between md:flex md:items-center"},n={class:"flex flex-col gap-y-4"};const o=e({},[["render",function(e,o){return s(),t("div",r,[a("div",d,[l(e.$slots,"header")]),a("div",n,[l(e.$slots,"default")])])}]]);export{o as _};
