@@ -1,1 +1,0 @@
-{"version":3,"file":"server.mjs","sources":["../../../../node_modules/.pnpm/nuxt@3.9.1_@parcel+watcher@2.3.0_eslint@8.50.0_typescript@5.2.2_vue-tsc@1.8.13/node_modules/nuxt/dist/app/entry-spa.js"],"sourcesContent":["export default () => {\n};\n"],"names":["entrySpa"],"mappings":"AAAA,MAAAA,EAAe","x_google_ignoreList":[0]}

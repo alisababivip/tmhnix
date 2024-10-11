@@ -1,1 +1,0 @@
-import{y as t,o as e,b as a,e as s,ah as r}from"../e/entry-8qgg5CL-.js";const n={type:"button",class:"bg-gray-700/40 dark:bg-gray-700/40 shadow flex h-9 w-9 items-center justify-center rounded-full transition-all duration-300"};const o=t({},[["render",function(t,o){const i=r;return e(),a("button",n,[s(i,{class:"text-white dark:text-white"})])}]]);export{o as default};

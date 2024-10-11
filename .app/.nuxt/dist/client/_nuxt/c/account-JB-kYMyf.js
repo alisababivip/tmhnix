@@ -1,1 +1,0 @@
-import{d as s}from"../e/entry-8qgg5CL-.js";import{u as t}from"./useForex-v_V55_1y.js";const c=s({id:"forexAccount",state:()=>({accounts:[],loading:!1}),actions:{async fetchAccounts(){const{getForexAccounts:s}=t(),c=await s();"success"===c.status&&(this.accounts=c.data.result)}}});export{c as u};
