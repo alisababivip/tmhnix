@@ -1,0 +1,1 @@
+import{a as s,Q as a,R as o,c as l,o as e,b as t,u as g}from"../e/entry-8qgg5CL-.js";const r=["src"],n=s({__name:"FullLogo",setup(s){const n=a(),i=o(),u=l((()=>i.isDarkMode)),c=l((()=>u.value?n.settings?.dark_full_logo:n.settings?.full_logo));return(s,a)=>(e(),t("img",{loading:"lazy",height:"96",src:g(c)?g(c):"/img/placeholder.png",alt:"Site Logo"},null,8,r))}});export{n as _};
