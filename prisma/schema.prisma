@@ -1,0 +1,1870 @@
+generator client {
+  provider = "prisma-client-js"
+  seed     = "./seed/seed.mjs"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model user {
+  id                      Int                       @id @default(autoincrement())
+  uuid                    String                    @unique(map: "uuid") @default(uuid()) @db.VarChar(60)
+  email                   String?                   @unique(map: "email") @db.VarChar(255)
+  password                String?                   @db.VarChar(255)
+  avatar                  String?                   @db.VarChar(1000)
+  first_name              String?                   @db.VarChar(255)
+  last_name               String?                   @db.VarChar(255)
+  email_verified          Boolean                   @default(false)
+  is_active               Boolean                   @default(true)
+  phone                   String?                   @db.VarChar(255)
+  role_id                 Int                       @default(1)
+  metadata                Json?                     @db.Json
+  notifications           Json?                     @db.Json
+  last_login              DateTime?                 @db.DateTime(0)
+  last_failed_login       DateTime?                 @db.DateTime(0)
+  failed_login_attempts   Int?                      @default(0)
+  wallet_address          String?                   @unique @db.VarChar(255)
+  wallet_provider         String?                   @db.VarChar(255)
+  status                  user_status?              @default(ACTIVE)
+  created_at              DateTime                  @default(now()) @db.DateTime(0)
+  deleted_at              DateTime?                 @db.DateTime(0)
+  updated_at              DateTime?
+  provideruser            provideruser[]
+  refreshtokens           refreshtokens[]
+  session                 session[]
+  role                    role                      @relation(fields: [role_id], references: [id], map: "User_role_id_fkey")
+  notification            notification[]
+  sentChats               support_chat[]            @relation("SentChats")
+  receivedChats           support_chat[]            @relation("ReceivedChats")
+  wallet                  wallet[]
+  twofactor               twofactor?
+  author                  author?
+  transaction             transaction[]
+  sentInvoices            invoice[]                 @relation("SentInvoices")
+  receivedInvoices        invoice[]                 @relation("ReceivedInvoices")
+  exchange_orders         exchange_orders[]
+  binary_orders           binary_orders[]
+  investment              investment[]
+  support_ticket          support_ticket[]
+  kyc                     kyc?
+  exchange_watchlist      exchange_watchlist[]
+  api_key                 api_key[]
+  ai_trading              ai_trading[]
+  forex_account           forex_account[]
+  forex_investment        forex_investment[]
+  ico_contribution        ico_contribution[]
+  staking_log             staking_log[]
+  ecommerce_order         ecommerce_order[]
+  ecommerce_review        ecommerce_review[]
+  ecommerce_wishlist      ecommerce_wishlist[]
+  ecommerce_user_discount ecommerce_user_discount[]
+  p2p_offer               p2p_offer[]
+  p2p_dispute             p2p_dispute[]
+  p2p_offer_reviewer      p2p_review[]              @relation("Reviewer")
+  p2p_offer_reviewed      p2p_review[]              @relation("Reviewed")
+  p2p_payment_method      p2p_payment_method[]
+  p2p_buyer               p2p_trade[]               @relation("Buyer")
+  p2p_seller              p2p_trade[]               @relation("Seller")
+  referredBy              mlm_referral?             @relation("Referred")
+  referrals               mlm_referral[]            @relation("Referrer")
+  referral_rewards        mlm_referral_reward[]
+}
+
+model mlm_referral {
+  id         String              @id @default(uuid())
+  created_at DateTime            @default(now())
+  status     mlm_referral_status @default(PENDING)
+
+  referrerUuid String
+  referrer     user   @relation("Referrer", fields: [referrerUuid], references: [uuid], onDelete: Cascade)
+
+  referredUuid      String             @unique
+  referred          user               @relation("Referred", fields: [referredUuid], references: [uuid], onDelete: Cascade)
+  mlm_binary_node   mlm_binary_node?
+  mlm_unilevel_node mlm_unilevel_node?
+
+  @@unique([referrerUuid, referredUuid])
+}
+
+model mlm_binary_node {
+  id          String       @id @default(uuid())
+  referral_id String       @unique
+  referral    mlm_referral @relation(fields: [referral_id], references: [id])
+
+  parent_id      String?
+  parent         mlm_binary_node? @relation("ParentChild", fields: [parent_id], references: [id])
+  left_child_id  String?
+  left_child     mlm_binary_node? @relation("LeftChild", fields: [left_child_id], references: [id])
+  right_child_id String?
+  right_child    mlm_binary_node? @relation("RightChild", fields: [right_child_id], references: [id])
+
+  childs         mlm_binary_node[] @relation("ParentChild")
+  left_children  mlm_binary_node[] @relation("LeftChild")
+  right_children mlm_binary_node[] @relation("RightChild")
+}
+
+model mlm_unilevel_node {
+  id          String              @id @default(uuid())
+  referral_id String              @unique
+  referral    mlm_referral        @relation(fields: [referral_id], references: [id])
+  parent_id   String?
+  parent      mlm_unilevel_node?  @relation("Parent", fields: [parent_id], references: [id])
+  childs      mlm_unilevel_node[] @relation("Parent")
+}
+
+model mlm_referral_reward {
+  id         String   @id @default(uuid())
+  reward     Float
+  is_claimed Boolean  @default(false)
+  created_at DateTime @default(now())
+
+  condition_id String
+  condition    mlm_referral_condition @relation(fields: [condition_id], references: [id], onDelete: Cascade)
+
+  referrerUuid String
+  referrer     user   @relation(fields: [referrerUuid], references: [uuid], onDelete: Cascade)
+}
+
+model mlm_referral_condition {
+  id                 String                             @id @default(uuid())
+  name               String                             @unique
+  title              String
+  description        String
+  type               mlm_referral_condition_type
+  reward             Float
+  reward_type        mlm_referral_condition_reward_type
+  reward_wallet_type wallet_type
+  reward_currency    String
+  reward_chain       String?
+  status             Boolean                            @default(true)
+  referral_reward    mlm_referral_reward[]
+}
+
+enum mlm_referral_status {
+  PENDING
+  ACTIVE
+  REJECTED
+}
+
+enum mlm_referral_condition_reward_type {
+  PERCENTAGE
+  FIXED
+}
+
+enum mlm_referral_condition_type {
+  DEPOSIT
+  TRADE
+  INVESTENT
+  AI_INVESTMENT
+  FOREX_INVESTMENT
+  ICO_CONTRIBUTION
+  STAKING
+  ECOMMERCE_PURCHASE
+  P2P_TRADE
+}
+
+model session {
+  id           Int      @id @default(autoincrement())
+  user_id      Int
+  sid          String   @unique(map: "sid")
+  access_token String   @db.VarChar(4000)
+  csrf_token   String   @db.VarChar(255)
+  is_active    Boolean
+  ip_address   String
+  created_at   DateTime @default(now()) @db.DateTime(0)
+  user         user     @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "Session_user_id_fkey")
+
+  @@index([user_id], map: "Session_user_id_fkey")
+}
+
+enum user_status {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+  BANNED
+}
+
+model notification {
+  id         Int       @id @default(autoincrement())
+  user_id    Int
+  user       user      @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "notifications_user_id_foreign")
+  type       String?   @db.VarChar(255)
+  title      String    @db.VarChar(255)
+  message    String    @db.Text
+  link       String?   @db.VarChar(255)
+  created_at DateTime? @db.Timestamp(0)
+  updated_at DateTime? @db.Timestamp(0)
+
+  @@index([user_id], map: "notifications_user_id_foreign")
+}
+
+model provideruser {
+  id               Int                   @id @default(autoincrement())
+  provider         provideruser_provider
+  provider_user_id String                @unique(map: "provider_user_id")
+  user_id          Int
+  updated_at       DateTime?
+  user             user                  @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "ProviderUser_user_id_fkey")
+
+  @@index([user_id], map: "ProviderUser_user_id_fkey")
+}
+
+model onetimetoken {
+  id           Int                       @id @default(autoincrement())
+  token_id     String                    @unique(map: "token_id") @db.VarChar(60)
+  token_type   onetimetokens_token_type?
+  expires_at   DateTime                  @db.DateTime(0)
+  date_created DateTime                  @default(now()) @db.DateTime(0)
+  updated_at   DateTime?
+}
+
+model refreshtokens {
+  id         Int      @id @default(autoincrement())
+  token_id   String   @unique(map: "token_id") @db.VarChar(255)
+  user_id    Int
+  is_active  Boolean
+  created_at DateTime @default(now()) @db.DateTime(0)
+  user       user     @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "RefreshTokens_user_id_fkey")
+
+  @@index([user_id], map: "RefreshTokens_user_id_fkey")
+}
+
+model role {
+  id             Int              @id @default(autoincrement())
+  name           String           @unique @db.VarChar(255)
+  rolepermission rolepermission[]
+  user           user[]
+}
+
+model permission {
+  id             Int              @id @default(autoincrement())
+  name           String           @db.VarChar(255)
+  rolepermission rolepermission[]
+}
+
+model rolepermission {
+  id            Int        @id @default(autoincrement())
+  role_id       Int
+  permission_id Int
+  permission    permission @relation(fields: [permission_id], references: [id], onDelete: Cascade, map: "RolePermission_permission_id_fkey")
+  role          role       @relation(fields: [role_id], references: [id], onDelete: Cascade, map: "RolePermission_role_id_fkey")
+
+  @@index([permission_id], map: "RolePermission_permission_id_fkey")
+  @@index([role_id], map: "RolePermission_role_id_fkey")
+}
+
+model api_key {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  key        String   @db.VarChar(255)
+  created_at DateTime @default(now()) @db.DateTime(0)
+  updated_at DateTime @updatedAt @db.DateTime(0)
+
+  user user @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id], name: "api_key_user_id_idx")
+}
+
+enum provideruser_provider {
+  GOOGLE
+}
+
+enum onetimetokens_token_type {
+  RESET
+}
+
+enum wallet_type {
+  FIAT
+  SPOT
+  ECO
+}
+
+model wallet {
+  id                       Int                        @id @default(autoincrement())
+  uuid                     String                     @unique @default(uuid())
+  user_id                  Int
+  type                     wallet_type
+  currency                 String                     @db.VarChar(255)
+  balance                  Float                      @default(0)
+  inOrder                  Float?                     @default(0)
+  addresses                Json?                      @db.Json
+  status                   Boolean                    @default(true)
+  created_at               DateTime                   @default(now())
+  updated_at               DateTime                   @updatedAt
+  user                     user                       @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  transactions             transaction[]
+  investment               investment[]
+  wallet_data              wallet_data[]
+  ecosystem_private_ledger ecosystem_private_ledger[]
+  ecosystem_utxo           ecosystem_utxo[]
+
+  @@unique([user_id, currency, type], name: "wallet_user_id_currency_type_unique")
+}
+
+model wallet_data {
+  id        Int    @id @default(autoincrement())
+  wallet_id Int
+  currency  String @db.VarChar(255)
+  chain     String @db.VarChar(255)
+  balance   Float  @default(0)
+  index     Int
+  data      Json   @db.Json
+  wallet    wallet @relation(fields: [wallet_id], references: [id])
+
+  @@unique([wallet_id, currency, chain], name: "wallet_data_unique")
+}
+
+model ecosystem_utxo {
+  id             Int     @id @default(autoincrement())
+  wallet_id      Int
+  transaction_id String  @db.VarChar(255)
+  index          Int
+  amount         Float
+  script         String  @db.VarChar(1000)
+  status         Boolean @default(false)
+  wallet         wallet  @relation(fields: [wallet_id], references: [id], onDelete: Cascade)
+
+  @@index([wallet_id], name: "ecosystem_utxo_wallet_id_idx")
+}
+
+enum MasterWalletStatus {
+  ACTIVE
+  INACTIVE
+}
+
+model ecosystem_master_wallet {
+  id                         Int                          @id @default(autoincrement())
+  uuid                       String                       @unique @default(uuid())
+  chain                      String                       @db.VarChar(255)
+  currency                   String                       @db.VarChar(255)
+  address                    String                       @db.VarChar(255)
+  balance                    Float                        @default(0)
+  data                       Json?                        @db.Json
+  status                     MasterWalletStatus           @default(ACTIVE)
+  last_index                 Int                          @default(0)
+  ecosystem_custodial_wallet ecosystem_custodial_wallet[]
+
+  @@unique([chain, currency], name: "ecosystem_master_wallet_chain_currency_unique")
+}
+
+model ecosystem_custodial_wallet {
+  id               Int                     @id @default(autoincrement())
+  uuid             String                  @unique @default(uuid())
+  master_wallet_id Int
+  master_wallet    ecosystem_master_wallet @relation(fields: [master_wallet_id], references: [id], onDelete: Cascade)
+  address          String                  @unique @db.VarChar(255)
+  chain            String                  @db.VarChar(255)
+  network          String                  @default("mainnet") @db.VarChar(255)
+  status           CustodialWalletStatus   @default(ACTIVE)
+  created_at       DateTime                @default(now())
+
+  @@index([master_wallet_id], name: "custodial_wallet_master_wallet_id_idx")
+}
+
+enum CustodialWalletStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+}
+
+model ecosystem_token {
+  id           Int                        @id @default(autoincrement())
+  contract     String                     @db.VarChar(255)
+  name         String                     @db.VarChar(255)
+  currency     String                     @db.VarChar(255)
+  chain        String                     @db.VarChar(255)
+  network      String                     @db.VarChar(255)
+  type         String                     @db.VarChar(255)
+  decimals     Int
+  status       Boolean?                   @default(false)
+  precision    Int?                       @default(8)
+  limits       Json?                      @db.Json
+  fees         Json?                      @db.Json
+  icon         String?                    @db.VarChar(1000)
+  contractType EcosystemTokenContractType @default(PERMIT)
+  created_at   DateTime                   @default(now())
+
+  @@unique([contract, chain], name: "UniqueContractInChain")
+}
+
+enum EcosystemTokenContractType {
+  PERMIT
+  NO_PERMIT
+  NATIVE
+}
+
+model ecosystem_market {
+  id          Int      @id @default(autoincrement())
+  symbol      String   @unique
+  pair        String
+  is_trending Boolean? @default(false)
+  is_hot      Boolean? @default(false)
+  metadata    Json?    @db.Json
+  status      Boolean
+}
+
+model ecosystem_private_ledger {
+  id                  Int    @id @default(autoincrement())
+  wallet_id           Int
+  index               Int
+  currency            String @db.VarChar(255)
+  chain               String @db.VarChar(255)
+  network             String @default("mainnet") @db.VarChar(255)
+  offchain_difference Float  @default(0)
+  wallet              wallet @relation(fields: [wallet_id], references: [id], onDelete: Cascade)
+
+  @@unique([wallet_id, index, currency, chain, network], name: "private_ledger_unique")
+}
+
+model transaction {
+  id           Int                @id @default(autoincrement())
+  uuid         String             @unique @default(uuid())
+  user_id      Int
+  wallet_id    Int
+  type         transaction_type
+  status       transaction_status @default(PENDING)
+  amount       Float
+  fee          Float?             @default(0)
+  description  String?            @db.Text
+  metadata     Json?              @db.Json
+  reference_id String?            @unique
+  created_at   DateTime           @default(now())
+  updated_at   DateTime?          @updatedAt
+  wallet       wallet             @relation(fields: [wallet_id], references: [id], onDelete: Cascade)
+  user         user               @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  invoice      invoice[]
+
+  @@index([wallet_id], map: "transaction_wallet_id_foreign")
+}
+
+enum transaction_type {
+  FAILED
+  DEPOSIT
+  WITHDRAW
+  OUTGOING_TRANSFER
+  INCOMING_TRANSFER
+  PAYMENT
+  REFUND
+  BINARY_ORDER
+  EXCHANGE_ORDER
+  INVESTMENT
+  INVESTMENT_ROI
+  AI_INVESTMENT
+  AI_INVESTMENT_ROI
+  INVOICE
+  FOREX_DEPOSIT
+  FOREX_WITHDRAW
+  FOREX_INVESTMENT
+  FOREX_INVESTMENT_ROI
+  ICO_CONTRIBUTION
+  REFERRAL_REWARD
+  STAKING
+  STAKING_REWARD
+  P2P_OFFER_TRANSFER
+  P2P_TRADE
+}
+
+enum transaction_status {
+  PENDING
+  COMPLETED
+  FAILED
+  CANCELLED
+  EXPIRED
+  REJECTED
+  REFUNDED
+  TIMEOUT
+}
+
+model invoice {
+  id             Int            @id @default(autoincrement())
+  amount         Float
+  description    String?        @db.Text
+  status         invoice_status
+  transaction_id Int?
+  transaction    transaction?   @relation(fields: [transaction_id], references: [id], onDelete: Cascade)
+  sender_id      Int
+  sender         user           @relation("SentInvoices", fields: [sender_id], references: [id], onDelete: Cascade)
+  receiver_id    Int
+  receiver       user           @relation("ReceivedInvoices", fields: [receiver_id], references: [id], onDelete: Cascade)
+  created_at     DateTime?      @default(now())
+  updated_at     DateTime?      @updatedAt
+  due_date       DateTime?
+
+  @@index([sender_id], map: "invoice_sender_id_foreign")
+  @@index([receiver_id], map: "invoice_receiver_id_foreign")
+  @@index([transaction_id], map: "invoice_transaction_id_foreign")
+}
+
+enum invoice_status {
+  UNPAID
+  PAID
+  CANCELLED
+}
+
+model twofactor {
+  id        Int             @id @default(autoincrement())
+  user_id   Int             @unique
+  user      user            @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  secret    String          @db.VarChar(255)
+  type      two_factor_type
+  enabled   Boolean         @default(false)
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+
+  @@index([user_id], map: "two_factor_user_id_foreign")
+}
+
+enum two_factor_type {
+  EMAIL
+  SMS
+  APP
+}
+
+model settings {
+  key   String @id @db.VarChar(255)
+  value String @db.Text
+}
+
+model author {
+  id      Int           @id @default(autoincrement())
+  uuid    String        @unique @default(uuid())
+  user_id Int           @unique
+  status  author_status @default(PENDING)
+  user    user          @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  posts   post[]
+  comment comment[]
+}
+
+enum author_status {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model category {
+  id          Int     @id @default(autoincrement())
+  name        String  @db.VarChar(255)
+  slug        String  @unique @db.VarChar(255)
+  image       String? @db.Text
+  description String? @db.Text
+  post        post[]
+}
+
+model comment {
+  id         Int       @id @default(autoincrement())
+  content    String    @db.Text
+  author_id  Int
+  author     author    @relation(fields: [author_id], references: [id], onDelete: Cascade, map: "comments_author_id_foreign")
+  post_id    Int
+  post       post      @relation(fields: [post_id], references: [id], onDelete: Cascade, map: "comments_post_id_foreign")
+  created_at DateTime? @default(now())
+  updated_at DateTime? @updatedAt
+
+  @@index([post_id], map: "comments_post_id_foreign")
+  @@index([author_id], map: "comments_author_id_foreign")
+}
+
+model post_tag {
+  id      Int  @id @default(autoincrement())
+  post_id Int
+  post    post @relation(fields: [post_id], references: [id], onDelete: Cascade, map: "post_tag_post_id_foreign")
+  tag_id  Int
+  tag     tag  @relation(fields: [tag_id], references: [id], onDelete: Cascade, map: "post_tag_tag_id_foreign")
+
+  @@index([post_id], map: "post_tag_post_id_foreign")
+  @@index([tag_id], map: "post_tag_tag_id_foreign")
+}
+
+model post {
+  id          Int         @id @default(autoincrement())
+  title       String      @db.VarChar(255)
+  content     String      @db.Text
+  category_id Int
+  category    category    @relation(fields: [category_id], references: [id], onDelete: Cascade, map: "posts_category_id_foreign")
+  author_id   Int
+  author      author      @relation(fields: [author_id], references: [id], onDelete: Cascade, map: "posts_author_id_foreign")
+  slug        String      @unique @db.VarChar(255)
+  description String?     @db.Text
+  status      post_status @default(DRAFT)
+  image       String?     @db.Text
+  created_at  DateTime?   @default(now())
+  updated_at  DateTime?   @updatedAt
+  comment     comment[]
+  post_tag    post_tag[]
+
+  @@index([category_id], map: "posts_category_id_foreign")
+  @@index([author_id], map: "posts_author_id_foreign")
+}
+
+enum post_status {
+  PUBLISHED
+  DRAFT
+  TRASH
+}
+
+model tag {
+  id       Int        @id @default(autoincrement())
+  name     String     @db.VarChar(255)
+  slug     String     @unique @db.VarChar(255)
+  post_tag post_tag[]
+}
+
+model exchange {
+  id            Int      @id @default(autoincrement())
+  name          String
+  title         String
+  status        Boolean? @default(false)
+  username      String?
+  licenseStatus Boolean? @default(false)
+  version       String?  @default("0.0.1")
+  productId     String?  @unique
+  type          String?  @default("spot")
+}
+
+model exchange_market {
+  id          Int      @id @default(autoincrement())
+  symbol      String   @unique
+  pair        String
+  is_trending Boolean? @default(false)
+  is_hot      Boolean? @default(false)
+  metadata    Json?    @db.Json
+  status      Boolean
+}
+
+model exchange_currency {
+  id        Int     @id @default(autoincrement())
+  currency  String  @unique
+  name      String
+  precision Float
+  price     Float?
+  status    Boolean
+  chains    Json?   @db.Json
+}
+
+model exchange_orders {
+  id           Int                    @id @default(autoincrement())
+  uuid         String                 @unique @default(uuid())
+  reference_id String?                @unique
+  user_id      Int
+  user         user                   @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "exchange_orders_user_id_foreign")
+  status       exchange_order_status
+  symbol       String
+  type         exchange_order_type
+  timeInForce  exchange_time_in_force
+  side         exchange_order_side
+  price        Float
+  average      Float?
+  amount       Float
+  filled       Float
+  remaining    Float
+  cost         Float
+  trades       Json?
+  fee          Float
+  fee_currency String
+  created_at   DateTime               @default(now())
+  updated_at   DateTime               @updatedAt
+
+  @@index([user_id], map: "exchange_orders_user_id_foreign")
+}
+
+enum exchange_order_side {
+  BUY
+  SELL
+}
+
+enum exchange_order_type {
+  MARKET
+  LIMIT
+}
+
+enum exchange_order_status {
+  OPEN
+  CLOSED
+  CANCELED
+  EXPIRED
+  REJECTED
+}
+
+enum exchange_time_in_force {
+  GTC
+  IOC
+  FOK
+  PO
+}
+
+model exchange_watchlist {
+  id      Int                     @id @default(autoincrement())
+  user_id Int
+  user    user                    @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "exchange_watchlist_user_id_foreign")
+  symbol  String
+  type    exchange_watchlist_type @default(TRADE)
+
+  @@index([user_id], map: "exchange_watchlist_user_id_foreign")
+}
+
+enum exchange_watchlist_type {
+  TRADE
+  BINARY
+  AI_TRADING
+  FOREX
+  STOCK
+  FUTURES
+}
+
+model binary_orders {
+  id          Int                 @id @default(autoincrement())
+  uuid        String              @unique @default(uuid())
+  user_id     Int
+  user        user                @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "binary_orders_user_id_foreign")
+  symbol      String
+  price       Float
+  amount      Float
+  profit      Float
+  side        binary_order_side
+  type        binary_order_type
+  status      binary_order_status
+  is_demo     Boolean             @default(false)
+  closed_at   DateTime
+  close_price Float?
+  created_at  DateTime            @default(now())
+  updated_at  DateTime            @updatedAt
+
+  @@index([user_id], map: "binary_orders_user_id_foreign")
+}
+
+enum binary_order_side {
+  RISE
+  FALL
+}
+
+enum binary_order_type {
+  RISE_FALL
+}
+
+enum binary_order_status {
+  PENDING
+  WIN
+  LOSS
+  DRAW
+  CANCELLED
+  REJECTED
+  EXPIRED
+}
+
+model withdraw_method {
+  id              Int      @id @default(autoincrement())
+  title           String   @db.VarChar(255)
+  processing_time String   @db.VarChar(255)
+  instructions    String   @db.Text
+  image           String?  @db.VarChar(1000)
+  fixed_fee       Float    @default(0.00)
+  percentage_fee  Float    @default(0.00)
+  min_amount      Float    @default(0.00)
+  max_amount      Float
+  custom_fields   Json?    @db.Json
+  status          Boolean? @default(true)
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+}
+
+model deposit_method {
+  id             Int      @id @default(autoincrement())
+  title          String   @db.VarChar(255)
+  instructions   String   @db.Text
+  image          String?  @db.VarChar(1000)
+  fixed_fee      Float    @default(0.00)
+  percentage_fee Float    @default(0.00)
+  min_amount     Float    @default(0.00)
+  max_amount     Float
+  custom_fields  Json?    @db.Json
+  status         Boolean? @default(true)
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+}
+
+model investment_plan {
+  id          Int           @id @default(autoincrement())
+  name        String        @unique
+  title       String
+  image       String?
+  description String        @db.Text
+  currency    fiat_currency @default(USD)
+  min_amount  Float
+  max_amount  Float
+  roi         Float
+  duration    Int
+  status      Boolean?      @default(false)
+  created_at  DateTime      @default(now())
+  investment  investment[]
+}
+
+model investment {
+  id         Int               @id @default(autoincrement())
+  uuid       String            @unique @default(uuid())
+  user_id    Int
+  user       user              @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "investment_user_id_foreign")
+  plan_id    Int
+  plan       investment_plan   @relation(fields: [plan_id], references: [id], onDelete: Cascade, map: "investment_plan_id_foreign")
+  wallet_id  Int
+  wallet     wallet            @relation(fields: [wallet_id], references: [id], onDelete: Cascade, map: "investment_wallet_id_foreign")
+  amount     Float
+  roi        Float
+  duration   Int
+  status     investment_status @default(PENDING)
+  created_at DateTime          @default(now())
+  updated_at DateTime          @updatedAt
+
+  @@index([user_id], map: "investment_user_id_foreign")
+  @@index([plan_id], map: "investment_plan_id_foreign")
+}
+
+enum investment_status {
+  PENDING
+  ACTIVE
+  COMPLETED
+  CANCELLED
+  REJECTED
+}
+
+model support_chat {
+  id             Int              @id @default(autoincrement())
+  uuid           String           @unique @default(uuid())
+  user_id        Int
+  agent_id       Int?
+  messages       Json?            @db.Json
+  created_at     DateTime?        @db.Timestamp(0)
+  updated_at     DateTime?        @db.Timestamp(0)
+  user           user             @relation("SentChats", fields: [user_id], references: [id], onDelete: Cascade)
+  agent          user?            @relation("ReceivedChats", fields: [agent_id], references: [id], onDelete: Cascade)
+  support_ticket support_ticket[]
+
+  @@index([user_id], map: "messages_user_id_foreign")
+  @@index([agent_id], map: "agent_id")
+}
+
+model support_ticket {
+  id         Int               @id @default(autoincrement())
+  uuid       String            @unique @default(uuid())
+  user_id    Int
+  user       user              @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "support_ticket_user_id_foreign")
+  chat_id    Int?
+  chat       support_chat?     @relation(fields: [chat_id], references: [id], onDelete: Cascade, map: "support_ticket_chat_id_foreign")
+  subject    String
+  message    String
+  importance ticket_importance @default(LOW)
+  status     ticket_status     @default(PENDING)
+  created_at DateTime          @default(now())
+  updated_at DateTime          @updatedAt
+
+  @@index([user_id], map: "support_ticket_user_id_foreign")
+}
+
+enum ticket_status {
+  PENDING
+  OPEN
+  REPLIED
+  CLOSED
+}
+
+enum ticket_importance {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+model page {
+  id          Int         @id @default(autoincrement())
+  title       String      @db.VarChar(255)
+  content     String      @db.Text
+  description String?     @db.Text
+  image       String?     @db.Text
+  slug        String      @unique @db.VarChar(255)
+  status      page_status @default(DRAFT)
+  created_at  DateTime?   @default(now())
+  updated_at  DateTime?   @updatedAt
+}
+
+enum page_status {
+  PUBLISHED
+  DRAFT
+}
+
+model currency {
+  id        Int     @id @default(autoincrement())
+  code      String  @unique
+  name      String
+  symbol    String
+  precision Float
+  price     Float?
+  status    Boolean
+}
+
+enum fiat_currency {
+  AED
+  AFN
+  ALL
+  AMD
+  ANG
+  AOA
+  ARS
+  AUD
+  AWG
+  AZN
+  BAM
+  BBD
+  BDT
+  BGN
+  BHD
+  BIF
+  BMD
+  BND
+  BOB
+  BRL
+  BSD
+  BTN
+  BWP
+  BYN
+  BYR
+  BZD
+  CAD
+  CDF
+  CHF
+  CLF
+  CLP
+  CNY
+  COP
+  CRC
+  CUC
+  CUP
+  CVE
+  CZK
+  DJF
+  DKK
+  DOP
+  DZD
+  EGP
+  ERN
+  ETB
+  EUR
+  FJD
+  FKP
+  GBP
+  GEL
+  GGP
+  GHS
+  GIP
+  GMD
+  GNF
+  GTQ
+  GYD
+  HKD
+  HNL
+  HRK
+  HTG
+  HUF
+  IDR
+  ILS
+  IMP
+  INR
+  IQD
+  IRR
+  ISK
+  JEP
+  JMD
+  JOD
+  JPY
+  KES
+  KGS
+  KHR
+  KMF
+  KPW
+  KRW
+  KWD
+  KYD
+  KZT
+  LAK
+  LBP
+  LKR
+  LRD
+  LSL
+  LTL
+  LVL
+  LYD
+  MAD
+  MDL
+  MGA
+  MKD
+  MMK
+  MNT
+  MOP
+  MRO
+  MUR
+  MVR
+  MWK
+  MXN
+  MYR
+  MZN
+  NAD
+  NGN
+  NIO
+  NOK
+  NPR
+  NZD
+  OMR
+  PAB
+  PEN
+  PGK
+  PHP
+  PKR
+  PLN
+  PYG
+  QAR
+  RON
+  RSD
+  RUB
+  RWF
+  SAR
+  SBD
+  SCR
+  SDG
+  SEK
+  SGD
+  SHP
+  SLL
+  SOS
+  SRD
+  STD
+  SVC
+  SYP
+  SZL
+  THB
+  TJS
+  TMT
+  TND
+  TOP
+  TRY
+  TTD
+  TWD
+  TZS
+  UAH
+  UGX
+  USD
+  UYU
+  UZS
+  VEF
+  VND
+  VUV
+  WST
+  XAF
+  XAG
+  XAU
+  XCD
+  XDR
+  XOF
+  XPF
+  YER
+  ZAR
+  ZMK
+  ZMW
+  ZWL
+}
+
+model deposit_gateway {
+  id             Int                  @id @default(autoincrement())
+  name           String               @unique
+  title          String
+  description    String               @db.Text
+  image          String?              @db.VarChar(1000)
+  alias          String?              @unique
+  currencies     Json?                @db.Json
+  fixed_fee      Float?               @default(0.00)
+  percentage_fee Float?               @default(0.00)
+  min_amount     Float?               @default(0.00)
+  max_amount     Float?
+  type           deposit_gateway_type @default(FIAT)
+  status         Boolean?             @default(false)
+  version        String?              @default("0.0.1")
+  productId      String?              @unique
+}
+
+enum deposit_gateway_type {
+  FIAT
+  CRYPTO
+}
+
+model kyc_template {
+  id      Int      @id @default(autoincrement())
+  title   String   @unique
+  options Json?    @db.Json
+  status  Boolean? @default(false)
+  kyc     kyc[]
+}
+
+model kyc {
+  id          Int          @id @default(autoincrement())
+  user_id     Int          @unique
+  user        user         @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "kyc_user_id_foreign")
+  template_id Int
+  template    kyc_template @relation(fields: [template_id], references: [id], onDelete: Cascade, map: "kyc_template_id_foreign")
+  data        Json?        @db.Json
+  status      kyc_status   @default(PENDING)
+  level       Int          @default(0)
+  notes       String?      @db.Text
+  created_at  DateTime     @default(now())
+  updated_at  DateTime     @updatedAt
+
+  @@index([user_id], map: "kyc_user_id_foreign")
+  @@index([template_id], map: "kyc_template_id_foreign")
+}
+
+enum kyc_status {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model system_health {
+  id         Int      @id @default(autoincrement())
+  name       String   @unique
+  status     Boolean? @default(false)
+  notes      String?  @db.Text
+  updated_at DateTime @updatedAt
+}
+
+model extension {
+  id          Int      @id @default(autoincrement())
+  product_id  String   @unique
+  name        String   @unique
+  title       String?
+  description String?  @db.Text
+  link        String?
+  status      Boolean? @default(false)
+  version     String?  @default("0.0.1")
+  image       String?  @db.VarChar(1000)
+}
+
+model notification_templates {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  subject     String
+  email_body  String?  @db.Text
+  sms_body    String?  @db.Text
+  push_body   String?  @db.Text
+  short_codes Json?    @db.Json
+  email       Boolean? @default(false)
+  sms         Boolean? @default(false)
+  push        Boolean? @default(false)
+}
+
+model frontend {
+  id      Int      @id @default(autoincrement())
+  section String   @unique
+  title   String
+  content Json?    @db.Json
+  status  Boolean? @default(false)
+}
+
+enum ai_trading_result {
+  WIN
+  LOSS
+  DRAW
+}
+
+enum ai_trading_status {
+  ACTIVE
+  COMPLETED
+  CANCELLED
+  REJECTED
+}
+
+model ai_trading_plan {
+  id                       Int                        @id @default(autoincrement())
+  name                     String                     @unique
+  title                    String
+  description              String?                    @db.Text
+  image                    String?                    @db.VarChar(1000)
+  status                   Boolean?                   @default(false)
+  invested                 Int                        @default(0)
+  profit_percentage        Float                      @default(0.00)
+  min_profit               Float
+  max_profit               Float
+  min_amount               Float                      @default(0.00)
+  max_amount               Float
+  trending                 Boolean?                   @default(false)
+  default_profit           Float
+  default_result           ai_trading_result
+  ai_trading               ai_trading[]
+  ai_trading_plan_duration ai_trading_plan_duration[]
+}
+
+model ai_trading {
+  id          Int                  @id @default(autoincrement())
+  uuid        String               @unique @default(uuid())
+  user_id     Int
+  user        user                 @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "ai_trading_user_id_foreign")
+  plan_id     Int
+  plan        ai_trading_plan      @relation(fields: [plan_id], references: [id], onDelete: Cascade, map: "ai_trading_plan_id_foreign")
+  duration_id Int?
+  duration    ai_trading_duration? @relation(fields: [duration_id], references: [id], onDelete: Cascade, map: "ai_trading_duration_id_foreign")
+  market      String
+  amount      Float
+  profit      Float?
+  result      ai_trading_result?
+  status      ai_trading_status    @default(ACTIVE)
+  created_at  DateTime             @default(now())
+  updated_at  DateTime             @updatedAt
+
+  @@index([user_id], map: "ai_trading_user_id_foreign")
+  @@index([plan_id], map: "ai_trading_plan_id_foreign")
+  @@index([duration_id], map: "ai_trading_duration_id_foreign")
+}
+
+model ai_trading_duration {
+  id                       Int                        @id @default(autoincrement())
+  duration                 Int
+  timeframe                ai_trading_timeframe
+  ai_trading_plan_duration ai_trading_plan_duration[]
+  ai_trading               ai_trading[]
+}
+
+enum ai_trading_timeframe {
+  HOUR
+  DAY
+  WEEK
+  MONTH
+}
+
+model ai_trading_plan_duration {
+  id          Int                 @id @default(autoincrement())
+  plan_id     Int
+  plan        ai_trading_plan     @relation(fields: [plan_id], references: [id], onDelete: Cascade, map: "ai_trading_plan_duration_plan_id_foreign")
+  duration_id Int
+  duration    ai_trading_duration @relation(fields: [duration_id], references: [id], onDelete: Cascade, map: "ai_trading_plan_duration_duration_id_foreign")
+
+  @@index([plan_id], map: "ai_trading_plan_duration_plan_id_foreign")
+  @@index([duration_id], map: "ai_trading_plan_duration_duration_id_foreign")
+}
+
+model forex_account {
+  id            Int                    @id @default(autoincrement())
+  user_id       Int?
+  user          user?                  @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  account_id    String?
+  password      String?
+  broker        String?
+  mt            Int?
+  balance       Float?                 @default(0.00)
+  leverage      Int?                   @default(1)
+  type          forex_account_type     @default(DEMO)
+  status        Boolean?
+  created_at    DateTime?
+  forex_signals forex_account_signal[]
+}
+
+enum forex_account_type {
+  DEMO
+  LIVE
+}
+
+model forex_plan {
+  id                  Int                     @id @default(autoincrement())
+  name                String                  @unique
+  title               String?
+  description         String?
+  image               String?
+  min_profit          Float
+  max_profit          Float
+  min_amount          Float?                  @default(0.00)
+  max_amount          Float?
+  invested            Int                     @default(0)
+  profit_percentage   Float                   @default(0.00)
+  status              Boolean?                @default(false)
+  default_profit      Int                     @default(0)
+  default_result      forex_investment_result
+  trending            Boolean?                @default(false)
+  created_at          DateTime                @default(now())
+  forex_plan_duration forex_plan_duration[]
+  forex_investment    forex_investment[]
+}
+
+model forex_investment {
+  id          Int                      @id @default(autoincrement())
+  uuid        String                   @unique @default(uuid())
+  user_id     Int
+  user        user                     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  plan_id     Int?
+  plan        forex_plan?              @relation(fields: [plan_id], references: [id], onDelete: Cascade)
+  duration_id Int?
+  duration    forex_duration?          @relation(fields: [duration_id], references: [id], onDelete: Cascade)
+  amount      Float?
+  profit      Float?
+  result      forex_investment_result?
+  status      forex_log_status         @default(ACTIVE)
+  created_at  DateTime                 @default(now())
+  end_date    DateTime?
+}
+
+enum forex_investment_result {
+  WIN
+  LOSS
+  DRAW
+}
+
+enum forex_log_status {
+  ACTIVE
+  COMPLETED
+  CANCELLED
+  REJECTED
+}
+
+model forex_plan_duration {
+  id          Int            @id @default(autoincrement())
+  plan_id     Int
+  plan        forex_plan     @relation(fields: [plan_id], references: [id], onDelete: Cascade)
+  duration_id Int
+  duration    forex_duration @relation(fields: [duration_id], references: [id], onDelete: Cascade)
+
+  @@index([plan_id], name: "idx_plan_id")
+  @@index([duration_id], name: "idx_duration_id")
+}
+
+model forex_duration {
+  id                  Int                   @id @default(autoincrement())
+  duration            Int
+  timeframe           forex_timeframe
+  forex_plan_duration forex_plan_duration[]
+  forex_investment    forex_investment[]
+}
+
+enum forex_timeframe {
+  HOUR
+  DAY
+  WEEK
+  MONTH
+}
+
+model forex_signal {
+  id             Int                    @id @default(autoincrement())
+  title          String
+  image          String
+  status         forex_signal_status    @default(ACTIVE)
+  created_at     DateTime               @default(now())
+  forex_accounts forex_account_signal[]
+}
+
+enum forex_signal_status {
+  ACTIVE
+  INACTIVE
+}
+
+model forex_account_signal {
+  forex_account_id Int
+  forex_signal_id  Int
+  forex_account    forex_account @relation(fields: [forex_account_id], references: [id], onDelete: Cascade)
+  forex_signal     forex_signal  @relation(fields: [forex_signal_id], references: [id], onDelete: Cascade)
+
+  @@id([forex_account_id, forex_signal_id])
+}
+
+model forex_currency {
+  id       Int     @id @default(autoincrement())
+  currency String  @unique
+  type     String?
+  status   Boolean @default(true)
+}
+
+model ico_project {
+  id          Int                @id @default(autoincrement())
+  uuid        String             @unique @default(uuid())
+  name        String
+  description String             @db.Text
+  website     String
+  whitepaper  String             @db.Text
+  image       String
+  status      ico_project_status @default(PENDING)
+  tokens      ico_token[]
+  created_at  DateTime           @default(now())
+  updated_at  DateTime           @updatedAt
+}
+
+enum ico_project_status {
+  PENDING
+  ACTIVE
+  COMPLETED
+  REJECTED
+  CANCELLED
+}
+
+model ico_token {
+  id                   Int              @id @default(autoincrement())
+  name                 String
+  chain                String
+  currency             String
+  purchase_currency    String           @default("ETH")
+  purchase_wallet_type wallet_type      @default(SPOT)
+  address              String
+  total_supply         Int
+  description          String           @db.Text
+  image                String
+  status               ico_token_status @default(PENDING)
+  project_id           Int
+  project              ico_project      @relation(fields: [project_id], references: [id], onDelete: Cascade)
+  phases               ico_phase[]
+  created_at           DateTime         @default(now())
+  updated_at           DateTime         @updatedAt
+  allocation           ico_allocation?
+}
+
+enum ico_token_status {
+  PENDING
+  ACTIVE
+  COMPLETED
+  REJECTED
+  CANCELLED
+}
+
+model ico_phase {
+  id            Int                    @id @default(autoincrement())
+  name          String
+  start_date    DateTime
+  end_date      DateTime
+  price         Float
+  status        ico_phase_status       @default(PENDING)
+  token_id      Int
+  token         ico_token              @relation(fields: [token_id], references: [id], onDelete: Cascade)
+  min_purchase  Float                  @default(0)
+  max_purchase  Float                  @default(0)
+  contributions ico_contribution[]
+  allocations   ico_phase_allocation[]
+  created_at    DateTime               @default(now())
+  updated_at    DateTime               @updatedAt
+}
+
+enum ico_phase_status {
+  PENDING
+  ACTIVE
+  COMPLETED
+  REJECTED
+  CANCELLED
+}
+
+model ico_contribution {
+  id         Int                     @id @default(autoincrement())
+  uuid       String                  @unique @default(uuid())
+  user_id    Int
+  user       user                    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  phase_id   Int
+  phase      ico_phase               @relation(fields: [phase_id], references: [id], onDelete: Cascade)
+  amount     Float
+  status     ico_contribution_status @default(PENDING)
+  created_at DateTime                @default(now())
+  updated_at DateTime                @updatedAt
+}
+
+enum ico_contribution_status {
+  PENDING
+  COMPLETED
+  CANCELLED
+  REJECTED
+}
+
+model ico_allocation {
+  id               Int                    @id @default(autoincrement())
+  name             String
+  percentage       Float
+  token_id         Int                    @unique
+  token            ico_token              @relation(fields: [token_id], references: [id], onDelete: Cascade)
+  status           ico_allocation_status  @default(PENDING)
+  created_at       DateTime               @default(now())
+  updated_at       DateTime               @updatedAt
+  phaseAllocations ico_phase_allocation[]
+}
+
+model ico_phase_allocation {
+  id            Int            @id @default(autoincrement())
+  allocation_id Int
+  phase_id      Int
+  percentage    Float
+  allocation    ico_allocation @relation(fields: [allocation_id], references: [id], onDelete: Cascade)
+  phase         ico_phase      @relation(fields: [phase_id], references: [id], onDelete: Cascade)
+  created_at    DateTime       @default(now())
+  updated_at    DateTime       @updatedAt
+}
+
+enum ico_allocation_status {
+  PENDING
+  COMPLETED
+  CANCELLED
+  REJECTED
+}
+
+model staking_pool {
+  id          Int                @id @default(autoincrement())
+  uuid        String             @unique @default(uuid())
+  name        String
+  description String             @db.Text
+  currency    String
+  chain       String
+  type        wallet_type        @default(SPOT)
+  min_stake   Float
+  max_stake   Float
+  status      staking_status     @default(ACTIVE)
+  durations   staking_duration[]
+  stakes      staking_log[]
+  created_at  DateTime           @default(now())
+}
+
+model staking_duration {
+  id            Int          @id @default(autoincrement())
+  pool_id       Int
+  duration      Int
+  interest_rate Float
+  pool          staking_pool @relation(fields: [pool_id], references: [id], onDelete: Cascade)
+  created_at    DateTime     @default(now())
+}
+
+enum staking_status {
+  ACTIVE
+  INACTIVE
+  COMPLETED
+}
+
+model staking_log {
+  id           Int          @id @default(autoincrement())
+  uuid         String       @unique @default(uuid())
+  user_id      Int
+  pool_id      Int
+  amount       Float
+  stake_date   DateTime
+  release_date DateTime
+  status       stake_status @default(ACTIVE)
+  user         user         @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  pool         staking_pool @relation(fields: [pool_id], references: [id], onDelete: Cascade)
+  created_at   DateTime     @default(now())
+}
+
+enum stake_status {
+  ACTIVE
+  RELEASED
+  WITHDRAWN
+}
+
+model faq_category {
+  id         Int    @id @default(autoincrement())
+  identifier String @unique
+  faqs       faq[]
+}
+
+model faq {
+  id              Int          @id @default(autoincrement())
+  faq_category_id Int
+  question        String       @db.Text
+  answer          String       @db.Text
+  category        faq_category @relation(fields: [faq_category_id], references: [id], onDelete: Cascade)
+}
+
+model ecommerce_product {
+  id                 Int                      @id @default(autoincrement())
+  name               String
+  description        String
+  type               String
+  price              Float
+  category_id        Int
+  inventory_quantity Int
+  file_path          String?
+  status             ecommerce_product_status @default(ACTIVE)
+  image              String?
+  currency           String                   @default("USD")
+  wallet_type        wallet_type              @default(SPOT)
+  created_at         DateTime                 @default(now())
+  updated_at         DateTime                 @updatedAt
+  category           ecommerce_category       @relation(fields: [category_id], references: [id])
+  reviews            ecommerce_review[]
+  order_items        ecommerce_order_item[]
+  discounts          ecommerce_discount[]
+  ecommerce_wishlist ecommerce_wishlist[]
+}
+
+enum ecommerce_product_status {
+  ACTIVE
+  INACTIVE
+}
+
+model ecommerce_category {
+  id          Int                       @id @default(autoincrement())
+  name        String
+  description String
+  image       String?
+  status      ecommerce_category_status @default(ACTIVE)
+  products    ecommerce_product[]
+}
+
+enum ecommerce_category_status {
+  ACTIVE
+  INACTIVE
+}
+
+model ecommerce_order {
+  id          Int                    @id @default(autoincrement())
+  uuid        String                 @unique @default(uuid())
+  user_id     Int
+  status      ecommerce_order_status @default(PENDING)
+  created_at  DateTime               @default(now())
+  updated_at  DateTime               @updatedAt
+  user        user                   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  order_items ecommerce_order_item[]
+}
+
+enum ecommerce_order_status {
+  PENDING
+  COMPLETED
+  CANCELLED
+  REJECTED
+}
+
+model ecommerce_order_item {
+  id         Int               @id @default(autoincrement())
+  order_id   Int
+  product_id Int
+  quantity   Int
+  key        String?
+  order      ecommerce_order   @relation(fields: [order_id], references: [id], onDelete: Cascade)
+  product    ecommerce_product @relation(fields: [product_id], references: [id], onDelete: Cascade)
+
+  @@unique([order_id, product_id])
+}
+
+model ecommerce_review {
+  id         Int                     @id @default(autoincrement())
+  product_id Int
+  user_id    Int
+  rating     Int
+  comment    String?
+  status     ecommerce_review_status @default(ACTIVE)
+  product    ecommerce_product       @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  user       user                    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([product_id, user_id], map: "ecommerce_review_product_id_user_id_unique")
+}
+
+enum ecommerce_review_status {
+  ACTIVE
+  INACTIVE
+}
+
+model ecommerce_discount {
+  id                      Int                       @id @default(autoincrement())
+  code                    String                    @unique
+  percentage              Int
+  valid_until             DateTime
+  product_id              Int
+  status                  ecommerce_discount_status @default(ACTIVE)
+  product                 ecommerce_product         @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  ecommerce_user_discount ecommerce_user_discount[]
+}
+
+enum ecommerce_discount_status {
+  ACTIVE
+  INACTIVE
+}
+
+model ecommerce_user_discount {
+  id          Int                       @id @default(autoincrement())
+  user_id     Int
+  discount_id Int
+  status      ecommerce_discount_status @default(ACTIVE)
+  user        user                      @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  discount    ecommerce_discount        @relation(fields: [discount_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, discount_id], map: "ecommerce_user_discount_user_id_discount_id_unique")
+}
+
+model ecommerce_wishlist {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  product_id Int
+  created_at DateTime @default(now())
+
+  user    user              @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  product ecommerce_product @relation(fields: [product_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, product_id])
+  @@map("ecommerce_wishlist")
+}
+
+model p2p_offer {
+  id                Int                @id @default(autoincrement())
+  uuid              String             @unique @default(uuid())
+  user_id           Int
+  wallet_type       wallet_type        @default(SPOT)
+  currency          String
+  chain             String?
+  amount            Float
+  min_amount        Float              @default(0.00)
+  max_amount        Float?
+  in_order          Float              @default(0.00)
+  price             Float
+  payment_method_id Int
+  status            p2p_offer_status   @default(PENDING)
+  created_at        DateTime           @default(now())
+  updated_at        DateTime           @updatedAt
+  user              user               @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  payment_method    p2p_payment_method @relation(fields: [payment_method_id], references: [id], onDelete: Cascade)
+  trades            p2p_trade[]
+  reviews           p2p_review[]
+}
+
+enum p2p_offer_status {
+  PENDING
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
+model p2p_trade {
+  id         Int              @id @default(autoincrement())
+  uuid       String           @unique @default(uuid())
+  user_id    Int
+  user       user             @relation("Buyer", fields: [user_id], references: [id], onDelete: Cascade)
+  seller_id  Int
+  seller     user?            @relation("Seller", fields: [seller_id], references: [id], onDelete: Cascade)
+  offer_id   Int
+  offer      p2p_offer        @relation(fields: [offer_id], references: [id], onDelete: Cascade)
+  amount     Float
+  status     p2p_trade_status @default(PENDING)
+  messages   Json?            @db.Json
+  tx_hash    String?
+  created_at DateTime         @default(now())
+  updated_at DateTime         @updatedAt
+  disputes   p2p_dispute[]
+  escrow     p2p_escrow?
+  commission p2p_commission?
+}
+
+enum p2p_trade_status {
+  PENDING
+  PAID
+  DISPUTE_OPEN
+  ESCROW_REVIEW
+  CANCELLED
+  RELEASED
+  COMPLETED
+  REFUNDED
+}
+
+model p2p_escrow {
+  id         Int               @id @default(autoincrement())
+  trade_id   Int               @unique
+  trade      p2p_trade         @relation(fields: [trade_id], references: [id], onDelete: Cascade)
+  amount     Float
+  status     p2p_escrow_status @default(PENDING)
+  created_at DateTime          @default(now())
+  updated_at DateTime          @updatedAt
+}
+
+enum p2p_escrow_status {
+  PENDING
+  HELD
+  RELEASED
+  CANCELLED
+}
+
+model p2p_payment_method {
+  id           Int         @id @default(autoincrement())
+  user_id      Int
+  user         user        @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  name         String      @db.VarChar(255)
+  instructions String      @db.Text
+  currency     String      @default("USD")
+  image        String?     @db.VarChar(1000)
+  status       Boolean     @default(true)
+  created_at   DateTime    @default(now())
+  updated_at   DateTime    @updatedAt
+  offer        p2p_offer[]
+}
+
+model p2p_dispute {
+  id           Int                @id @default(autoincrement())
+  trade_id     Int
+  trade        p2p_trade          @relation(fields: [trade_id], references: [id], onDelete: Cascade)
+  raised_by_id Int
+  raised_by    user               @relation(fields: [raised_by_id], references: [id], onDelete: Cascade)
+  reason       String             @db.Text
+  status       p2p_dispute_status @default(PENDING)
+  resolution   String?            @db.Text
+  created_at   DateTime           @default(now())
+  updated_at   DateTime           @updatedAt
+}
+
+enum p2p_dispute_status {
+  PENDING
+  IN_PROGRESS
+  RESOLVED
+  CANCELLED
+}
+
+model p2p_review {
+  id          Int       @id @default(autoincrement())
+  reviewer_id Int
+  reviewer    user      @relation("Reviewer", fields: [reviewer_id], references: [id], onDelete: Cascade)
+  reviewed_id Int
+  reviewed    user      @relation("Reviewed", fields: [reviewed_id], references: [id], onDelete: Cascade)
+  offer_id    Int
+  offer       p2p_offer @relation(fields: [offer_id], references: [id], onDelete: Cascade)
+  rating      Int
+  comment     String?   @db.Text
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+
+  @@unique([reviewer_id, reviewed_id, offer_id])
+}
+
+model p2p_commission {
+  id         Int       @id @default(autoincrement())
+  trade_id   Int       @unique
+  trade      p2p_trade @relation(fields: [trade_id], references: [id], onDelete: Cascade)
+  amount     Float
+  created_at DateTime  @default(now())
+}
+
+model mailwizard_campaign {
+  id          Int                 @id @default(autoincrement())
+  name        String
+  subject     String
+  status      mailwizard_status   @default(PENDING)
+  speed       Int                 @default(1)
+  targets     Json?               @db.Json
+  template_id Int
+  template    mailwizard_template @relation(fields: [template_id], references: [id], onDelete: Cascade, map: "mailwizard_campaign_template_id_foreign")
+  created_at  DateTime            @default(now())
+  updated_at  DateTime            @updatedAt
+}
+
+enum mailwizard_status {
+  PENDING
+  PAUSED
+  ACTIVE
+  STOPPED
+  COMPLETED
+  CANCELED
+}
+
+model mailwizard_template {
+  id         Int                   @id @default(autoincrement())
+  name       String
+  content    String                @db.Text
+  design     String                @db.Text
+  created_at DateTime              @default(now())
+  updated_at DateTime              @updatedAt
+  campaigns  mailwizard_campaign[]
+}
+
+model mailwizard_block {
+  id         Int      @id @default(autoincrement())
+  name       String
+  design     String   @db.Text
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}

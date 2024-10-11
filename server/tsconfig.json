@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "outDir": "../dist",
+    "rootDir": ".",
+    "module": "CommonJS",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "downlevelIteration": true,
+    "target": "esnext",
+    "baseUrl": ".",
+    "paths": {
+      "~~/*": ["./*"]
+    }
+  },
+  "include": ["**/*.ts"],
+  "exclude": ["node_modules"]
+}

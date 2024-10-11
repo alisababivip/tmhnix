@@ -1,0 +1,6 @@
+.app/public
+.demo/public
+.app/.nuxt
+.app/.output
+.app/CHANGELOG.md
+.app/node_modules

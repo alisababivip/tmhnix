@@ -1,0 +1,8 @@
+{
+  "watch": ["./server/**/*.ts", "./server/**/*.json", ".env"],
+  "ext": "ts,json,mjs",
+  "exec": "ts-node ./server/index.ts",
+  "env": {
+    "NODE_ENV": "development"
+  }
+}

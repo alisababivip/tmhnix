@@ -1,0 +1,787 @@
+[
+  {
+    "name": "Dashboard",
+    "to": "/user",
+    "permission": null
+  },
+  {
+    "name": "Binary Trading",
+    "to": "/user/binary",
+    "permission": null,
+    "setting": ["spot_exchange", "binary_trading"]
+  },
+  {
+    "name": "AI Trading",
+    "permission": null,
+    "extension": "ai_trading",
+    "activePath": "/user/ai-trading",
+    "children": [
+      {
+        "name": "Dashboard",
+        "icon": "icon-park-outline:more-app",
+        "to": "/user/ai-trading",
+        "permission": null
+      },
+      {
+        "name": "Investments",
+        "icon": "solar:bill-list-bold-duotone",
+        "to": "/user/ai-trading/investments",
+        "permission": null
+      }
+    ]
+  },
+  {
+    "name": "Forex",
+    "icon": "streamline:money-currency-pound-circle-pound-sterling-exchange-payment-forex-finance-currency-money-foreign",
+    "permission": null,
+    "extension": "forex",
+    "activePath": "/user/forex",
+    "children": [
+      {
+        "name": "Accounts",
+        "icon": "mdi:account-tie",
+        "to": "/user/forex",
+        "permission": null
+      },
+      {
+        "name": "Investments",
+        "icon": "solar:bill-list-bold-duotone",
+        "to": "/user/forex/investments",
+        "permission": null
+      }
+    ]
+  },
+  {
+    "name": "ICO",
+    "icon": "ph:hand-coins-duotone",
+    "permission": null,
+    "extension": "ico",
+    "activePath": "/user/ico",
+    "children": [
+      {
+        "name": "Projects",
+        "icon": "fa-solid:project-diagram",
+        "to": "/user/ico",
+        "permission": null
+      },
+      {
+        "name": "Contributions",
+        "icon": "solar:bill-list-bold-duotone",
+        "to": "/user/ico/contributions",
+        "permission": null
+      }
+    ]
+  },
+
+  {
+    "name": "Staking",
+    "icon": "fluent:money-hand-20-regular",
+    "permission": null,
+    "extension": "staking",
+    "activePath": "/user/staking",
+    "children": [
+      {
+        "name": "Staking Pools",
+        "icon": "fa-solid:coins",
+        "to": "/user/staking",
+        "permission": null
+      },
+      {
+        "name": "My Stakes",
+        "icon": "mdi:sack-percent",
+        "to": "/user/staking/logs",
+        "permission": null
+      }
+    ]
+  },
+  {
+    "name": "P2P Trading",
+    "icon": "ri:p2p-fill",
+    "extension": "p2p",
+    "activePath": "/user/p2p",
+    "children": [
+      {
+        "name": "Browse Offers",
+        "icon": "icon-park-outline:more-app",
+        "to": "/user/p2p"
+      },
+      {
+        "name": "My Offers",
+        "icon": "ic:baseline-local-offer",
+        "to": "/user/p2p/offers"
+      },
+      {
+        "name": "My Trades",
+        "icon": "tabler:exchange",
+        "to": "/user/p2p/trades"
+      },
+      {
+        "name": "Payment Methods",
+        "icon": "fluent:payment-16-regular",
+        "to": "/user/p2p/payment-methods"
+      }
+    ]
+  },
+  {
+    "name": "Investment",
+    "to": "/user/invest",
+    "permission": null
+  },
+  {
+    "name": "Affiliate",
+    "icon": "tabler:affiliate",
+    "permission": null,
+    "activePath": "/user/affiliate",
+    "extension": "mlm",
+    "children": [
+      {
+        "name": "Referrals",
+        "icon": "fluent:people-48-filled",
+        "to": "/user/affiliate/referrals",
+        "permission": null
+      },
+      {
+        "name": "Rewards",
+        "icon": "bxs:award",
+        "to": "/user/affiliate/rewards",
+        "permission": null
+      }
+    ]
+  },
+  {
+    "name": "Shop",
+    "icon": "fa-solid:store",
+    "activePath": "/user/shop",
+    "extension": "ecommerce",
+    "children": [
+      {
+        "name": "Browse Products",
+        "icon": "fa-solid:th-large",
+        "to": "/user/shop"
+      },
+      {
+        "name": "Your Orders",
+        "icon": "fa-solid:shopping-basket",
+        "to": "/user/shop/orders"
+      }
+    ]
+  },
+  {
+    "name": "Blog",
+    "permission": null,
+    "activePath": "/user/blog",
+    "setting": ["blog"],
+    "children": [
+      {
+        "name": "Posts",
+        "icon": "ph:newspaper-duotone",
+        "to": "/blog",
+        "permission": null
+      },
+      {
+        "name": "Categories",
+        "icon": "ph:folder-duotone",
+        "to": "/blog/categories",
+        "permission": null
+      },
+      {
+        "name": "Tags",
+        "icon": "ph:tag-duotone",
+        "to": "/blog/tags",
+        "permission": null
+      },
+      {
+        "name": "Author",
+        "icon": "ph:user-circle-duotone",
+        "to": "/blog/author",
+        "permission": null
+      }
+    ]
+  },
+  {
+    "divider": true
+  },
+  {
+    "name": "Admin Dashboard",
+    "to": "/admin",
+    "permission": "Access Admin Dashboard"
+  },
+  {
+    "name": "Support Tickets",
+    "to": "/admin/support",
+    "permission": "Access Support Tickets"
+  },
+  {
+    "name": "AI Trading",
+    "icon": "lucide:bot",
+    "permission": "Access AI Trading Management",
+    "extension": "ai_trading",
+    "activePath": "/admin/extensions/ai-trading",
+    "children": [
+      {
+        "name": "Management",
+        "icon": "line-md:cog-filled-loop",
+
+        "to": "/admin/extensions/ai-trading",
+        "permission": "Access AI Trading Management"
+      },
+      {
+        "name": "Investments",
+        "icon": "fa6-solid:money-bill",
+        "to": "/admin/extensions/ai-trading/investments",
+        "permission": "Access AI Trading Management"
+      },
+      {
+        "name": "Plans",
+        "icon": "fluent:money-settings-24-regular",
+
+        "to": "/admin/extensions/ai-trading/plans",
+        "permission": "Access AI Trading Management"
+      },
+      {
+        "name": "Durations",
+        "icon": "fluent:timer-16-regular",
+        "to": "/admin/extensions/ai-trading/durations",
+        "permission": "Access AI Trading Management"
+      }
+    ]
+  },
+  {
+    "name": "Ecosystem",
+    "icon": "nimbus:ecosystem",
+    "permission": "Access Ecosystem Management",
+    "extension": "ecosystem",
+    "activePath": "/admin/extensions/ecosystem",
+    "children": [
+      {
+        "name": "Blockchains",
+        "icon": "icon-park-twotone:blockchain",
+        "to": "/admin/extensions/ecosystem/blockchains",
+        "permission": "View Ecosystem Blockchains"
+      },
+      {
+        "name": "Master Wallets",
+        "icon": "solar:wallet-2-bold-duotone",
+        "to": "/admin/extensions/ecosystem/blockchains/wallets",
+        "permission": "View Ecosystem Blockchains"
+      },
+      {
+        "name": "Markets",
+        "icon": "tabler:exchange",
+        "to": "/admin/extensions/ecosystem/markets",
+        "permission": "View Ecosystem Markets"
+      },
+      {
+        "name": "Private Ledgers",
+        "icon": "simple-icons:hyperledger",
+        "to": "/admin/extensions/ecosystem/ledgers",
+        "permission": "View Ecosystem Private Ledgers"
+      }
+    ]
+  },
+  {
+    "name": "Forex",
+    "icon": "ph:hand-coins-duotone",
+    "permission": "Access Forex Management",
+    "extension": "forex",
+    "activePath": "/admin/extensions/forex",
+    "children": [
+      {
+        "name": "Management",
+        "icon": "line-md:cog-filled-loop",
+
+        "to": "/admin/extensions/forex",
+        "permission": "Access Forex Management"
+      },
+      {
+        "name": "Account",
+        "icon": "line-md:account-small",
+
+        "to": "/admin/extensions/forex/accounts",
+        "permission": "View Forex Accounts"
+      },
+      {
+        "name": "Investments",
+        "icon": "fluent-mdl2:hexadite-investigation-semi-auto",
+
+        "to": "/admin/extensions/forex/investments",
+        "permission": "View Forex Investments"
+      },
+      {
+        "name": "Transactions",
+        "icon": "icon-park-outline:transaction-order",
+
+        "to": "/admin/extensions/forex/transactions",
+        "permission": "View Forex Transactions"
+      },
+      {
+        "name": "Plans",
+        "icon": "solar:planet-bold-duotone",
+
+        "to": "/admin/extensions/forex/plans",
+        "permission": "View Forex Plans"
+      },
+      {
+        "name": "Durations",
+        "icon": "fluent:timer-16-regular",
+        "to": "/admin/extensions/forex/durations",
+        "permission": "View Forex Durations"
+      },
+      {
+        "name": "Signals",
+        "icon": "uim:signal-alt-3",
+        "to": "/admin/extensions/forex/signals",
+        "permission": "View Forex Signals"
+      },
+      {
+        "name": "Currencies",
+        "icon": "ph:currency-btc",
+        "to": "/admin/extensions/forex/currencies",
+        "permission": "View Forex Currencies"
+      }
+    ]
+  },
+  {
+    "name": "ICO",
+    "icon": "streamline:money-currency-pound-circle-pound-sterling-exchange-payment-forex-finance-currency-money-foreign",
+    "permission": "Access Ico Management",
+    "extension": "ico",
+    "activePath": "/admin/extensions/ico",
+    "children": [
+      {
+        "name": "Management",
+        "icon": "line-md:cog-filled-loop",
+
+        "to": "/admin/extensions/ico",
+        "permission": "Access Ico Management"
+      },
+      {
+        "name": "Projects",
+        "icon": "eos-icons:project-outlined",
+
+        "to": "/admin/extensions/ico/projects",
+        "permission": "View Ico Projects"
+      },
+      {
+        "name": "Tokens",
+        "icon": "ic:outline-generating-tokens",
+
+        "to": "/admin/extensions/ico/tokens",
+        "permission": "View Ico Tokens"
+      },
+      {
+        "name": "Phases",
+        "icon": "fa-solid:project-diagram",
+
+        "to": "/admin/extensions/ico/phases",
+        "permission": "View Ico Phases"
+      },
+      {
+        "name": "Allocations",
+        "icon": "icon-park-outline:endpoint-displacement",
+
+        "to": "/admin/extensions/ico/allocations",
+        "permission": "View Ico Allocations"
+      },
+      {
+        "name": "Contributions",
+        "icon": "ooui:user-contributions-ltr",
+
+        "to": "/admin/extensions/ico/contributions",
+        "permission": "View Ico Contributions"
+      }
+    ]
+  },
+  {
+    "name": "Staking",
+    "icon": "fluent:money-settings-20-regular",
+    "permission": "View Staking Management",
+    "extension": "staking",
+    "activePath": "/admin/extensions/staking",
+    "children": [
+      {
+        "name": "Dashboard",
+        "icon": "mdi:view-dashboard-outline",
+
+        "to": "/admin/extensions/staking",
+        "permission": "View Staking Dashboard"
+      },
+      {
+        "name": "Pools",
+        "icon": "fa-solid:layer-group",
+
+        "to": "/admin/extensions/staking/pools",
+        "permission": "View Staking Pools"
+      },
+      {
+        "name": "Durations",
+        "icon": "icon-park-outline:timer",
+
+        "to": "/admin/extensions/staking/durations",
+        "permission": "View Staking Durations"
+      },
+      {
+        "name": "Logs",
+        "icon": "fa-solid:clipboard-list",
+
+        "to": "/admin/extensions/staking/logs",
+        "permission": "View Staking Logs"
+      }
+    ]
+  },
+  {
+    "name": "E-Commerce",
+    "icon": "fa-solid:shopping-cart",
+    "permission": "Access Ecommerce Management",
+    "extension": "ecommerce",
+    "activePath": "/admin/extensions/ecommerce",
+    "children": [
+      {
+        "name": "Dashboard",
+        "icon": "fa-solid:chart-line",
+
+        "to": "/admin/extensions/ecommerce",
+        "permission": "Access Ecommerce Management"
+      },
+      {
+        "name": "Products",
+        "icon": "fa-solid:box-open",
+        "to": "/admin/extensions/ecommerce/products",
+        "permission": "View Ecommerce Products"
+      },
+      {
+        "name": "Categories",
+        "icon": "fa-solid:tags",
+
+        "to": "/admin/extensions/ecommerce/categories",
+        "permission": "View Ecommerce Categories"
+      },
+      {
+        "name": "Orders",
+        "icon": "fa-solid:receipt",
+        "to": "/admin/extensions/ecommerce/orders",
+        "permission": "View Ecommerce Orders"
+      },
+      {
+        "name": "Discounts",
+        "icon": "fa-solid:percent",
+        "to": "/admin/extensions/ecommerce/discounts",
+        "permission": "View Ecommerce Discounts"
+      },
+      {
+        "name": "Reviews",
+        "icon": "fa-solid:comment-alt",
+
+        "to": "/admin/extensions/ecommerce/reviews",
+        "permission": "View Ecommerce Reviews"
+      }
+    ]
+  },
+  {
+    "name": "P2P Management",
+    "icon": "ri:p2p-fill",
+    "permission": "Access P2P Management",
+    "extension": "p2p",
+    "activePath": "/admin/extensions/p2p",
+    "children": [
+      {
+        "name": "Dashboard",
+        "icon": "fa-solid:chart-line",
+        "to": "/admin/extensions/p2p",
+        "permission": "Access P2P Management"
+      },
+      {
+        "name": "Offers",
+        "icon": "ic:baseline-local-offer",
+        "to": "/admin/extensions/p2p/offers",
+        "permission": "View P2P Offers"
+      },
+      {
+        "name": "Trades",
+        "icon": "tabler:exchange",
+        "to": "/admin/extensions/p2p/trades",
+        "permission": "View P2P Trades"
+      },
+      {
+        "name": "Disputes",
+        "icon": "fa6-solid:gavel",
+        "to": "/admin/extensions/p2p/disputes",
+        "permission": "View P2P Disputes"
+      },
+      {
+        "name": "Payment Methods",
+        "icon": "fluent:payment-16-regular",
+        "to": "/admin/extensions/p2p/payment-methods",
+        "permission": "View P2P Payment Methods"
+      }
+    ]
+  },
+
+  {
+    "name": "Affiliate",
+    "icon": "tabler:affiliate",
+    "permission": "Access MLM Management",
+    "activePath": "/admin/extensions/affiliate",
+    "extension": "mlm",
+    "children": [
+      {
+        "name": "Dashboard",
+        "icon": "fa-solid:chart-line",
+        "to": "/admin/extensions/affiliate",
+        "permission": "Access MLM Management"
+      },
+      {
+        "name": "Nodes",
+        "icon": "material-symbols-light:network-node",
+        "to": "/admin/extensions/affiliate/nodes",
+        "permission": "View MLM Referrals"
+      },
+      {
+        "name": "Referrals",
+        "icon": "fluent:people-48-filled",
+        "to": "/admin/extensions/affiliate/referrals",
+        "permission": "View MLM Referrals"
+      },
+      {
+        "name": "Rewards",
+        "icon": "bxs:award",
+        "to": "/admin/extensions/affiliate/rewards",
+        "permission": "View MLM Rewards"
+      },
+      {
+        "name": "Settings",
+        "icon": "fluent:settings-16-regular",
+        "to": "/admin/extensions/affiliate/settings",
+        "permission": "Access MLM Management"
+      }
+    ]
+  },
+  {
+    "name": "Knowledge Base",
+    "icon": "wpf:faq",
+    "permission": "Access Knowledge Base Management",
+    "extension": "knowledge_base",
+    "activePath": "/admin/extensions/faq",
+    "children": [
+      {
+        "name": "FAQ Management",
+        "icon": "solar:list-line-duotone",
+
+        "to": "/admin/extensions/faq",
+        "permission": "Access Knowledge Base Management"
+      },
+      {
+        "name": "FAQ Entries",
+        "icon": "heroicons-outline:clipboard-list",
+
+        "to": "/admin/extensions/faq/entries",
+        "permission": "View FAQs"
+      },
+      {
+        "name": "FAQ Categories",
+        "icon": "heroicons-outline:template",
+
+        "to": "/admin/extensions/faq/categories",
+        "permission": "View FAQ Categories"
+      }
+    ]
+  },
+
+  {
+    "name": "MailWizard",
+    "icon": "fluent:mail-16-regular",
+    "permission": "Access Mailwizard Management",
+    "extension": "mailwizard",
+    "activePath": "/admin/extensions/mailwizard",
+    "children": [
+      {
+        "name": "Dashboard",
+        "icon": "solar:list-line-duotone",
+        "to": "/admin/extensions/mailwizard",
+        "permission": "Access Mailwizard Management"
+      },
+      {
+        "name": "Templates",
+        "icon": "heroicons-outline:clipboard-list",
+        "to": "/admin/extensions/mailwizard/templates",
+        "permission": "View Mailwizard Templates"
+      },
+      {
+        "name": "Campaigns",
+        "icon": "heroicons-outline:template",
+        "to": "/admin/extensions/mailwizard/campaigns",
+        "permission": "View Mailwizard Campaigns"
+      }
+    ]
+  },
+  {
+    "name": "Users",
+    "permission": "Access Users Management",
+    "activePath": "/admin/users",
+    "children": [
+      {
+        "name": "Users",
+        "icon": "ph:users-duotone",
+        "to": "/admin/users",
+        "permission": "Access Users Management"
+      },
+      {
+        "name": "KYC Applications",
+        "icon": "streamline:interface-security-shield-profileshield-secure-security-profile-person",
+        "to": "/admin/kyc",
+        "permission": "Access KYC Applications Management"
+      },
+      {
+        "name": "KYC Templates",
+        "icon": "mdi:file-user",
+        "to": "/admin/kyc/templates",
+        "permission": "Access KYC Templates Management"
+      },
+      {
+        "name": "Roles",
+        "icon": "ph:user-gear-duotone",
+        "to": "/admin/roles",
+        "permission": "Access Roles Management"
+      },
+      {
+        "name": "Permissions",
+        "icon": "ph:key-duotone",
+        "to": "/admin/permissions",
+        "permission": "Access Permissions Management"
+      }
+    ]
+  },
+  {
+    "name": "Finance",
+    "permission": "Access Financial Management",
+    "activePath": "/admin/finance",
+    "children": [
+      {
+        "name": "Wallets",
+        "icon": "solar:wallet-outline",
+        "to": "/admin/finance/wallets",
+        "permission": "Access Wallet Management"
+      },
+      {
+        "name": "Transactions",
+        "icon": "icon-park-twotone:log",
+        "to": "/admin/finance/log",
+        "permission": "Access Transaction Logs"
+      },
+      {
+        "name": "Binary Orders",
+        "icon": "ic:sharp-clear-all",
+        "to": "/admin/finance/exchange/log?type=binary",
+        "permission": "Access Exchange Logs",
+        "setting": ["spot_exchange", "binary_trading"]
+      },
+      {
+        "name": "Trade Orders",
+        "icon": "ic:sharp-clear-all",
+        "to": "/admin/finance/exchange/log?type=trade",
+        "permission": "Access Exchange Logs"
+      },
+      {
+        "name": "Fiat Deposit Methods",
+        "icon": "mdi:bank-transfer-in",
+        "to": "/admin/finance/deposit/methods",
+        "permission": "Access Deposit Methods"
+      },
+      {
+        "name": "Fiat Deposit Gateways",
+        "icon": "mdi:bank-transfer-in",
+        "to": "/admin/finance/deposit/gateways",
+        "permission": "Access Deposit Gateways"
+      },
+      {
+        "name": "Fiat Withdraw Methods",
+        "icon": "mdi:bank-transfer-out",
+        "to": "/admin/finance/withdraw/methods",
+        "permission": "Access Withdraw Methods"
+      },
+      {
+        "name": "Investment Plans",
+        "icon": "fluent:money-settings-24-regular",
+        "to": "/admin/finance/investment-plans",
+        "permission": "Access Investment Plans"
+      },
+      {
+        "name": "Investments",
+        "icon": "fa6-solid:money-bill",
+        "to": "/admin/finance/investments",
+        "permission": "Access Investment Logs"
+      }
+    ]
+  },
+  {
+    "name": "Blog",
+    "permission": "Access Blog Management",
+    "activePath": "/admin/blog",
+    "setting": ["blog"],
+    "children": [
+      {
+        "name": "Authors",
+        "icon": "ph:file-text-duotone",
+        "to": "/admin/blog/authors",
+        "permission": "Access Blog Authors"
+      },
+      {
+        "name": "Posts",
+        "icon": "ph:newspaper-duotone",
+        "to": "/admin/blog/posts",
+        "permission": "Access Blog Posts"
+      },
+      {
+        "name": "Categories",
+        "icon": "ph:folder-duotone",
+        "to": "/admin/blog/categories",
+        "permission": "Access Blog Categories"
+      },
+      {
+        "name": "Tags",
+        "icon": "ph:tag-duotone",
+        "to": "/admin/blog/tags",
+        "permission": "Access Blog Tags"
+      }
+    ]
+  },
+  {
+    "name": "System",
+    "permission": "Access System Management",
+    "activePath": "/admin/settings",
+    "children": [
+      {
+        "name": "Settings",
+        "icon": "ph:gear-duotone",
+        "to": "/admin/settings",
+        "permission": "Access Settings"
+      },
+
+      {
+        "name": "Appearance",
+        "icon": "dashicons:admin-appearance",
+        "to": "/admin/appearance",
+        "permission": "Access Appearance",
+        "setting": ["frontend_type"]
+      },
+      {
+        "name": "Cron",
+        "icon": "eos-icons:cronjob",
+        "to": "/admin/cron",
+        "permission": "Access Cron"
+      },
+      {
+        "name": "Extensions",
+        "icon": "codicon:extensions",
+        "to": "/admin/system/extensions",
+        "permission": "Access Extensions"
+      },
+      {
+        "name": "Update",
+        "icon": "solar:server-square-update-line-duotone",
+        "to": "/admin/system/update",
+        "permission": "Access System Update"
+      }
+    ]
+  }
+]

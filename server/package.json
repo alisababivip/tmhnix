@@ -1,0 +1,8 @@
+{
+  "name": "app",
+  "private": true,
+  "type": "commonjs",
+  "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.2"
+  }
+}

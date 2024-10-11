@@ -1,0 +1,274 @@
+[
+  {
+    "name": "Dashboard",
+    "icon": { "name": "ph:sidebar-duotone", "class": "w-5 h-5" },
+    "to": "/user",
+    "permission": null
+  },
+  {
+    "name": "Binary Trading",
+    "icon": { "name": "icon-park-outline:trend-two", "class": "w-5 h-5" },
+    "to": "/user/binary",
+    "permission": null
+  },
+  {
+    "name": "AI Trading",
+    "icon": { "name": "lucide:bot", "class": "w-5 h-5" },
+    "to": "/user/ai-trading",
+    "permission": null,
+    "extension": "ai_trading"
+  },
+  {
+    "name": "Investment",
+    "icon": {
+      "name": "fluent-mdl2:hexadite-investigation-semi-auto",
+      "class": "w-5 h-5"
+    },
+    "to": "/user/invest",
+    "permission": null
+  },
+  {
+    "name": "Blog",
+    "icon": { "name": "fluent-mdl2:blog", "class": "w-5 h-5" },
+    "permission": null,
+    "activePath": "/blog",
+    "children": [
+      {
+        "name": "Posts",
+        "icon": { "name": "ph:newspaper-duotone", "class": "w-4 h-4" },
+        "to": "/blog",
+        "permission": null
+      },
+      {
+        "name": "Categories",
+        "icon": { "name": "ph:folder-duotone", "class": "w-4 h-4" },
+        "to": "/blog/categories",
+        "permission": null
+      },
+      {
+        "name": "Tags",
+        "icon": { "name": "ph:tag-duotone", "class": "w-4 h-4" },
+        "to": "/blog/tags",
+        "permission": null
+      },
+      {
+        "name": "Author",
+        "icon": { "name": "ph:user-circle-duotone", "class": "w-4 h-4" },
+        "to": "/blog/author",
+        "permission": null
+      }
+    ]
+  },
+  {
+    "divider": true
+  },
+  {
+    "name": "Admin Dashboard",
+    "to": "/admin",
+    "icon": { "name": "eos-icons:admin-outlined", "class": "w-5 h-5" },
+    "permission": "Access Admin Dashboard"
+  },
+  {
+    "name": "Support Tickets",
+    "to": "/admin/support",
+    "icon": { "name": "fluent:person-support-20-regular", "class": "w-5 h-5" },
+    "permission": "Access Support Tickets"
+  },
+  {
+    "name": "AI Trading",
+    "icon": { "name": "lucide:bot", "class": "w-5 h-5" },
+    "permission": "Access AI Trading Investment Management",
+    "extension": "ai_trading",
+    "activePath": "/admin/extensions/ai-trading",
+    "children": [
+      {
+        "name": "Investments",
+        "icon": { "name": "fa6-solid:money-bill", "class": "w-4 h-4" },
+        "to": "/admin/extensions/ai-trading/investments",
+        "permission": "Access AI Trading Investments"
+      },
+      {
+        "name": "Plans",
+        "icon": {
+          "name": "fluent:money-settings-24-regular",
+          "class": "w-4 h-4"
+        },
+        "to": "/admin/extensions/ai-trading/plans",
+        "permission": "Access AI Trading Plans"
+      },
+      {
+        "name": "Durations",
+        "icon": { "name": "fluent:timer-16-regular", "class": "w-4 h-4" },
+        "to": "/admin/extensions/ai-trading/durations",
+        "permission": "Access AI Trading Durations"
+      }
+    ]
+  },
+  {
+    "name": "Users",
+    "icon": { "name": "ph:users-duotone", "class": "w-5 h-5" },
+    "permission": "Access Users Management",
+    "activePath": "/admin/users",
+    "children": [
+      {
+        "name": "Users",
+        "icon": { "name": "ph:users-duotone", "class": "w-4 h-4" },
+        "to": "/admin/users",
+        "permission": "Access Users Management"
+      },
+      {
+        "name": "KYC Applications",
+        "icon": {
+          "name": "streamline:interface-security-shield-profileshield-secure-security-profile-person",
+          "class": "w-4 h-4"
+        },
+        "to": "/admin/kyc",
+        "permission": "Access KYC Applications Management"
+      },
+      {
+        "name": "KYC Templates",
+        "icon": { "name": "mdi:file-user", "class": "w-4 h-4" },
+        "to": "/admin/kyc/templates",
+        "permission": "Access KYC Templates Management"
+      },
+      {
+        "name": "Roles",
+        "icon": { "name": "ph:user-gear-duotone", "class": "w-4 h-4" },
+        "to": "/admin/roles",
+        "permission": "Access Roles Management"
+      },
+      {
+        "name": "Permissions",
+        "icon": { "name": "ph:key-duotone", "class": "w-4 h-4" },
+        "to": "/admin/permissions",
+        "permission": "Access Permissions Management"
+      }
+    ]
+  },
+  {
+    "name": "Finance",
+    "icon": { "name": "carbon:finance", "class": "w-5 h-5" },
+    "permission": "Access Financial Management",
+    "activePath": "/admin/finance",
+    "children": [
+      {
+        "name": "Wallets",
+        "icon": { "name": "solar:wallet-outline", "class": "w-4 h-4" },
+        "to": "/admin/finance/wallets",
+        "permission": "Access Wallet Management"
+      },
+      {
+        "name": "Transactions",
+        "icon": { "name": "icon-park-twotone:log", "class": "w-4 h-4" },
+        "to": "/admin/finance/log",
+        "permission": "Access Transaction Logs"
+      },
+      {
+        "name": "Binary Orders",
+        "icon": { "name": "ic:sharp-clear-all", "class": "w-4 h-4" },
+        "to": "/admin/finance/exchange/log?type=binary",
+        "permission": "Access Exchange Logs"
+      },
+      {
+        "name": "Trade Orders",
+        "icon": { "name": "ic:sharp-clear-all", "class": "w-4 h-4" },
+        "to": "/admin/finance/exchange/log?type=trade",
+        "permission": "Access Exchange Logs"
+      },
+      {
+        "name": "Fiat Deposit Methods",
+        "icon": { "name": "mdi:bank-transfer-in", "class": "w-4 h-4" },
+        "to": "/admin/finance/deposit/methods",
+        "permission": "Access Deposit Methods"
+      },
+      {
+        "name": "Fiat Deposit Gateways",
+        "icon": { "name": "mdi:bank-transfer-in", "class": "w-4 h-4" },
+        "to": "/admin/finance/deposit/gateways",
+        "permission": "Access Deposit Gateways"
+      },
+      {
+        "name": "Fiat Withdraw Methods",
+        "icon": { "name": "mdi:bank-transfer-out", "class": "w-4 h-4" },
+        "to": "/admin/finance/withdraw/methods",
+        "permission": "Access Withdraw Methods"
+      },
+      {
+        "name": "Investment Plans",
+        "icon": {
+          "name": "fluent:money-settings-24-regular",
+          "class": "w-4 h-4"
+        },
+        "to": "/admin/finance/investment-plans",
+        "permission": "Access Investment Plans"
+      },
+      {
+        "name": "Investments",
+        "icon": { "name": "fa6-solid:money-bill", "class": "w-4 h-4" },
+        "to": "/admin/finance/investments",
+        "permission": "Access Investment Logs"
+      }
+    ]
+  },
+  {
+    "name": "Blog",
+    "icon": { "name": "fluent-mdl2:blog", "class": "w-5 h-5" },
+    "permission": "Access Blog Management",
+    "activePath": "/admin/blog",
+    "children": [
+      {
+        "name": "Authors",
+        "icon": { "name": "ph:file-text-duotone", "class": "w-4 h-4" },
+        "to": "/admin/blog/authors",
+        "permission": "Access Blog Authors"
+      },
+      {
+        "name": "Posts",
+        "icon": { "name": "ph:newspaper-duotone", "class": "w-4 h-4" },
+        "to": "/admin/blog/posts",
+        "permission": "Access Blog Posts"
+      },
+      {
+        "name": "Categories",
+        "icon": { "name": "ph:folder-duotone", "class": "w-4 h-4" },
+        "to": "/admin/blog/categories",
+        "permission": "Access Blog Categories"
+      },
+      {
+        "name": "Tags",
+        "icon": { "name": "ph:tag-duotone", "class": "w-4 h-4" },
+        "to": "/admin/blog/tags",
+        "permission": "Access Blog Tags"
+      }
+    ]
+  },
+  {
+    "name": "System",
+    "icon": { "name": "solar:settings-line-duotone", "class": "w-5 h-5" },
+    "permission": "Access System Management",
+    "activePath": "/admin/system",
+    "children": [
+      {
+        "name": "Settings",
+        "icon": { "name": "ph:gear-duotone", "class": "w-4 h-4" },
+        "to": "/admin/settings",
+        "permission": "Access Settings"
+      },
+      {
+        "name": "Extensions",
+        "icon": { "name": "codicon:extensions", "class": "w-4 h-4" },
+        "to": "/admin/system/extensions",
+        "permission": "Access Extensions"
+      },
+      {
+        "name": "Update",
+        "icon": {
+          "name": "solar:server-square-update-line-duotone",
+          "class": "w-4 h-4"
+        },
+        "to": "/admin/system/update",
+        "permission": "Access System Update"
+      }
+    ]
+  }
+]

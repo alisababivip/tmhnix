@@ -1,0 +1,63 @@
+{
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    // "source.fixAll": false,
+    "source.organizeImports": true
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+    }
+  },
+  "[vue]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+    }
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "Nuxt.mdc",
+    "editor.formatOnSave": true
+  },
+  "tailwindCSS.experimental.configFile": ".demo/tailwind.config.ts",
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "**/node_modules": true,
+    "node_modules": true,
+    "**/pnpm-workspace.yaml": true,
+    "*.yaml": true,
+    "pnpm-workspace.yaml": true,
+    "**/*.yaml": true,
+    "**/.prettierrc": true,
+    ".prettierrc": true,
+    "**/.prettierignore": true,
+    ".prettierignore": true,
+    "**/.nuxtrc": true,
+    ".nuxtrc": true,
+    "**/.npmrc": true,
+    ".npmrc": true,
+    "**/.eslintrc.cjs": true,
+    "*.cjs": true,
+    ".eslintrc.cjs": true,
+    "**/*.cjs": true,
+    "**/.editorconfig": true,
+    ".editorconfig": true,
+    "**/.nuxt": true,
+    ".nuxt": true,
+    ".app/.output": true,
+    "**/.output": true,
+    ".output": true,
+    "servers\\backend/package-lock.json": true,
+    "**/package-lock.json": true,
+    "package-lock.json": true
+  },
+  "explorerExclude.backup": {},
+  "vue.codeActions.enabled": false
+}

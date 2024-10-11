@@ -1,0 +1,812 @@
+/* The scrollbar rail */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+/* The scrollbar 'thumb' (the handle you can drag) */
+::-webkit-scrollbar-thumb {
+  background-color: #c1c1c1;
+  border-radius: 4px;
+  transition: background-color 0.3s ease-in-out;
+}
+
+/* The scrollbar 'thumb' when hovered */
+::-webkit-scrollbar-thumb:hover {
+  background-color: #888;
+}
+
+/* The scrollbar 'track' */
+::-webkit-scrollbar-track {
+  background: #0000000e;
+  border-radius: 4px;
+}
+
+/* Dark theme styles */
+
+.dark ::-webkit-scrollbar-thumb {
+  background-color: rgb(30, 41, 59);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(36, 48, 66);
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #121212;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+#nt-container {
+  align-items: center;
+  justify-content: flex-end;
+  flex-direction: column;
+}
+
+.slow-bounce-scale {
+  animation: bounce-scale-slow 2s ease-in-out infinite alternate;
+}
+@keyframes bounce-scale-slow {
+  0% {
+    transform: translateY(0);
+    scale: 1;
+  }
+  100% {
+    transform: translateY(-5px);
+    scale: 1.02;
+  }
+}
+
+.slow-scale {
+  animation: scale-slow 2s ease-in-out infinite alternate;
+}
+@keyframes scale-slow {
+  0% {
+    scale: 1;
+  }
+  100% {
+    scale: 1.02;
+  }
+}
+
+.slow-bounce-scale-rotate {
+  animation: bounce-scale-slow-rotate 2s ease-in-out infinite alternate;
+}
+
+@keyframes bounce-scale-slow-rotate {
+  0% {
+    transform: translateY(0);
+    scale: 1;
+  }
+  100% {
+    transform: translateY(-5px);
+    scale: 1.05;
+  }
+}
+
+.slow-bounce {
+  animation: bounce-slow 2s ease-in-out infinite alternate;
+}
+@keyframes bounce-slow {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-5px);
+  }
+}
+
+.active-tab {
+  @apply bg-white text-gray-700 dark:bg-gray-900 dark:text-gray-300;
+}
+
+.inactive-tab {
+  @apply cursor-pointer border-transparent bg-gray-100 text-gray-400 hover:border-gray-300 hover:bg-gray-300 hover:text-gray-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:hover:text-gray-300;
+}
+
+.active-sub-tab {
+  @apply border-l-2 border-warning-500;
+}
+
+.order-label {
+  @apply flex w-full appearance-none justify-between rounded-lg border-gray-300 bg-transparent text-xs text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0 dark:border-gray-600 dark:text-gray-200 dark:focus:border-blue-500;
+}
+.leverage-label {
+  @apply text-start w-full appearance-none justify-between rounded-lg border-gray-300 bg-transparent text-xs text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0 dark:border-gray-600 dark:text-gray-200 dark:focus:border-blue-500;
+}
+
+.tradingContainer {
+  padding: 2px;
+  display: grid;
+  grid-template-columns: repeat(200, 1fr); /* 200 columns */
+  grid-template-rows: repeat(200, 1fr); /* 200 rows */
+  grid-auto-flow: row;
+}
+
+/* row-start / column-start / row-end / column-end */
+.Ticker {
+  grid-area: 2 / 1 / 18 / 101; /* 5% height, 50% width */
+}
+
+.Chart {
+  grid-area: 19 / 1 / 135 / 101; /* 95% height, 50% width */
+}
+.Orderbook {
+  grid-area: 2 / 101 / 135 / 151; /* 75% height, 25% width */
+  z-index: 1;
+}
+
+.Order {
+  grid-area: 2 / 151 / 135 / 201; /* 50% height, 25% width */
+}
+
+.Trades {
+  grid-area: 136 / 151 / 201 / 201; /* 50% height, 25% width */
+}
+
+.Orders {
+  grid-area: 136 / 1 / 201 / 151; /* 25% height, 75% width */
+  z-index: 2;
+}
+
+.collapseTradesOrdersButton {
+  grid-area: 135 / 1 / 135 / 180; /* Positioned right above Orders and Trades */
+  z-index: 50;
+}
+
+/* When Order is collapsed */
+.tradingContainerOrderCollapsed {
+  .Ticker {
+    grid-area: 2 / 1 / 18 / 151; /* Ticker takes Order's width, 5% height, 75% width */
+  }
+  .Chart {
+    grid-area: 19 / 1 / 135 / 151; /* Chart takes Order's width, 95% height, 75% width */
+  }
+  .Orderbook {
+    grid-area: 2 / 151 / 135 / 200; /* Orderbook moves to the right, taking 22% width */
+  }
+  .Order {
+    grid-area: 2 / 200 / 135 / 201; /* Order's width becomes minimal */
+  }
+}
+
+/* When Orderbook is collapsed */
+.tradingContainerOrderBookCollapsed {
+  .Ticker {
+    grid-area: 2 / 1 / 18 / 149; /* Ticker takes Orderbook's width */
+  }
+  .Chart {
+    grid-area: 19 / 1 / 135 / 149; /* Chart takes Orderbook's width */
+  }
+  .Orderbook {
+    grid-area: 2 / 149 / 135 / 151; /* Orderbook's width becomes minimal */
+  }
+  .Order {
+    grid-area: 2 / 151 / 135 / 201; /* Order moves to the right, taking 25% width */
+  }
+}
+
+/* When Order and Orderbook are collapsed */
+.tradingContainerOrderAndOrderBookCollapsed {
+  .Ticker {
+    grid-area: 2 / 1 / 18 / 199; /* Ticker takes Order and Orderbook's width */
+  }
+  .Chart {
+    grid-area: 19 / 1 / 135 / 199; /* Chart takes Order and Orderbook's width */
+  }
+  .Orderbook {
+    grid-area: 2 / 199 / 135 / 200; /* Orderbook's width becomes minimal */
+  }
+  .Order {
+    grid-area: 2 / 200 / 135 / 201; /* Order's width becomes minimal */
+  }
+}
+
+/* When Trades is collapsed */
+.tradingContainerTradesCollapsed {
+  .Orders {
+    grid-area: 136 / 1 / 201 / 200; /* Orders take Trades' width */
+  }
+  .Trades {
+    grid-area: 136 / 200 / 201 / 201; /* Trades' width becomes minimal */
+  }
+}
+
+/* When Orders is collapsed */
+.tradingContainerTradesOrdersCollapsed {
+  .Chart {
+    grid-area: 19 / 1 / 198 / 101; /* Chart takes Orders' height */
+  }
+  .Orderbook {
+    grid-area: 2 / 101 / 198 / 151; /* Orderbook takes Orders' height */
+  }
+  .Order {
+    grid-area: 2 / 151 / 198 / 201; /* Order takes Orders' height */
+  }
+  .Orders {
+    grid-area: 199 / 1 / 201 / 151; /* Orders' height becomes minimal */
+  }
+  .Trades {
+    grid-area: 199 / 152 / 201 / 201; /* Trades' height becomes minimal */
+  }
+  .collapseTradesOrdersButton {
+    grid-area: 198 / 1 / 198 / 201; /* Positioned right above Orders and Trades */
+  }
+}
+
+/* When Trades and Orders and orderbook are collapsed */
+.tradingContainerTradesOrdersOrderbookCollapsed {
+  .Chart {
+    grid-area: 19 / 1 / 198 / 149; /* Chart takes Orders' height */
+  }
+  .Orderbook {
+    grid-area: 2 / 149 / 198 / 151; /* Orderbook takes Orders' height */
+  }
+  .Order {
+    grid-area: 2 / 151 / 198 / 201; /* Order takes Orders' height */
+  }
+  .Orders {
+    grid-area: 199 / 1 / 201 / 151; /* Orders' height becomes minimal */
+  }
+  .Trades {
+    grid-area: 199 / 152 / 201 / 201; /* Trades' height becomes minimal */
+  }
+  .collapseTradesOrdersButton {
+    grid-area: 198 / 1 / 198 / 201; /* Positioned right above Orders and Trades */
+  }
+}
+
+/* When Trades and Orders and order are collapsed */
+.tradingContainerTradesOrdersOrderCollapsed {
+  .Ticker {
+    grid-area: 2 / 1 / 18 / 151; /* Ticker takes Order and Orderbook's width */
+  }
+  .Chart {
+    grid-area: 19 / 1 / 198 / 151; /* Chart takes Orders' height */
+  }
+  .Orderbook {
+    grid-area: 2 / 151 / 198 / 200; /* Orderbook takes Orders' height */
+  }
+  .Order {
+    grid-area: 2 / 200 / 198 / 201; /* Order takes Orders' height */
+  }
+  .Orders {
+    grid-area: 199 / 1 / 201 / 151; /* Orders' height becomes minimal */
+  }
+  .Trades {
+    grid-area: 199 / 152 / 201 / 201; /* Trades' height becomes minimal */
+  }
+  .collapseTradesOrdersButton {
+    grid-area: 198 / 1 / 198 / 201; /* Positioned right above Orders and Trades */
+  }
+}
+
+/* When Trades and orders and Orderbook and order are collapsed */
+.tradingContainerTradesOrdersOrderbookOrderCollapsed {
+  .Ticker {
+    grid-area: 2 / 1 / 18 / 199; /* Ticker takes Order and Orderbook's width */
+  }
+  .Chart {
+    grid-area: 19 / 1 / 198 / 199; /* Chart takes Orders' height */
+  }
+  .Orderbook {
+    grid-area: 2 / 199 / 198 / 200; /* Orderbook takes Orders' height */
+  }
+  .Order {
+    grid-area: 2 / 200 / 198 / 201; /* Order takes Orders' height */
+  }
+  .Orders {
+    grid-area: 199 / 1 / 201 / 151; /* Orders' height becomes minimal */
+  }
+  .Trades {
+    grid-area: 199 / 152 / 201 / 201; /* Trades' height becomes minimal */
+  }
+  .collapseTradesOrdersButton {
+    grid-area: 198 / 1 / 198 / 201; /* Positioned right above Orders and Trades */
+  }
+}
+
+.binaryContainer {
+  padding: 2px;
+  display: grid;
+  grid-template-columns: repeat(200, 1fr); /* 200 columns */
+  grid-template-rows: repeat(200, 1fr); /* 200 rows */
+  grid-auto-flow: row;
+}
+
+/* row-start / column-start / row-end / column-end */
+.binaryTicker {
+  grid-area: 2 / 1 / 18 / 176; /* 95% height, 50% width */
+}
+
+.binaryChart {
+  grid-area: 19 / 1 / 135 / 176; /* 95% height, 50% width */
+}
+
+.binaryOrder {
+  grid-area: 2 / 176 / 201 / 201; /* 50% height, 25% width */
+}
+
+.binaryOrders {
+  grid-area: 136 / 1 / 201 / 176; /* 25% height, 75% width */
+  z-index: 2;
+}
+.collapseBinaryOrdersButton {
+  grid-area: 135 / 1 / 135 / 201; /* Positioned right above Orders and Trades */
+  z-index: 50;
+}
+
+/* When Order is collapsed */
+.binaryContainerOrderCollapsed {
+  .binaryTicker {
+    grid-area: 2 / 1 / 18 / 200; /* Ticker takes Order and Orderbook's width */
+  }
+  .binaryChart {
+    grid-area: 19 / 1 / 135 / 200; /* Chart takes Order's width, 95% height, 75% width */
+  }
+  .binaryOrder {
+    grid-area: 2 / 200 / 135 / 201; /* Order's width becomes minimal */
+  }
+  .binaryOrders {
+    grid-area: 136 / 1 / 201 / 201; /* 25% height, 75% width */
+    z-index: 2;
+  }
+  .collapseBinaryOrdersButton {
+    grid-area: 135 / 1 / 135 / 201; /* Positioned right above Orders and Trades */
+  }
+}
+
+/* When Orders is collapsed */
+.binaryContainerOrdersCollapsed {
+  .binaryTicker {
+    grid-area: 2 / 1 / 18 / 176; /* Ticker takes Order and Orderbook's width */
+  }
+  .binaryChart {
+    grid-area: 19 / 1 / 198 / 176; /* Chart takes Orders' height */
+  }
+  .binaryOrder {
+    grid-area: 2 / 176 / 201 / 201; /* Order takes Orders' height */
+  }
+  .binaryOrders {
+    grid-area: 199 / 1 / 201 / 176; /* Orders' height becomes minimal */
+  }
+  .collapseBinaryOrdersButton {
+    grid-area: 198 / 1 / 198 / 201; /* Positioned right above Orders and Trades */
+  }
+}
+
+/* When Orders and order are collapsed */
+.binaryContainerOrdersOrderCollapsed {
+  .binaryTicker {
+    grid-area: 2 / 1 / 18 / 200; /* Ticker takes Order and Orderbook's width */
+  }
+  .binaryChart {
+    grid-area: 19 / 1 / 198 / 200; /* Chart takes Orders' height */
+  }
+  .binaryOrder {
+    grid-area: 2 / 200 / 201 / 201; /* Order takes Orders' height */
+  }
+  .binaryOrders {
+    grid-area: 199 / 1 / 201 / 200; /* Orders' height becomes minimal */
+  }
+  .collapseBinaryOrdersButton {
+    grid-area: 198 / 1 / 198 / 201; /* Positioned right above Orders and Trades */
+  }
+}
+
+/* Small Devices, Phones */
+@media only screen and (max-width: 640px) {
+  .tradingContainer {
+    grid-template-columns: 1fr; /* Only one column */
+    grid-template-rows: repeat(200, 1fr); /* 200 rows */
+  }
+  /* row-start / column-start / row-end / column-end */
+  .Ticker {
+    grid-area: 1 / 1 / 20 / 2;
+  }
+  .Chart {
+    grid-area: 21 / 1 / 110 / 2;
+  }
+  .Info {
+    grid-area: 111 / 1 / 175 / 2;
+  }
+
+  .binaryContainer {
+    grid-template-columns: 1fr; /* Only one column */
+    grid-template-rows: repeat(200, 1fr); /* 200 rows */
+  }
+
+  .binaryTicker {
+    grid-area: 1 / 1 / 18 / 1; /* Ticker takes Order and Orderbook's width */
+  }
+  .binaryChart {
+    grid-area: 19 / 1 / 110 / 1; /* 95% height, 50% width */
+  }
+
+  .binaryOrders {
+    grid-area: 111 / 1 / 186 / 1; /* 25% height, 75% width */
+    z-index: 2;
+  }
+  .collapseBinaryOrdersButton {
+    grid-area: 100 / 1 / 100 / 1; /* Positioned right above Orders and Trades */
+    z-index: 50;
+  }
+}
+
+/* Small Devices, Tablets */
+@media only screen and (min-width: 641px) and (max-width: 768px) {
+  .Ticker {
+    grid-area: 2 / 1 / 18 / 140; /* 5% height, 50% width */
+  }
+
+  .Order {
+    grid-area: 2 / 140 / 135 / 201; /* 50% height, 25% width */
+  }
+
+  .Orders {
+    grid-area: 136 / 1 / 201 / 201; /* 25% height, 75% width */
+    z-index: 2;
+  }
+
+  .ChartAndInfo {
+    grid-area: 19 / 1 / 135 / 140; /* 95% height, 50% width */
+  }
+
+  .tradingContainerOrderCollapsed {
+    .Ticker {
+      grid-area: 2 / 1 / 18 / 200; /* Ticker takes Order's width, 5% height, 75% width */
+    }
+    .ChartAndInfo {
+      grid-area: 19 / 1 / 135 / 200; /* Chart takes Order's width, 95% height, 75% width */
+    }
+    .Order {
+      grid-area: 2 / 200 / 135 / 201; /* Order's width becomes minimal */
+    }
+  }
+
+  .binaryTicker {
+    grid-area: 2 / 1 / 18 / 160;
+  }
+  .binaryChart {
+    grid-area: 19 / 1 / 135 / 160; /* 95% height, 50% width */
+  }
+
+  .binaryOrder {
+    grid-area: 2 / 160 / 135 / 201; /* 50% height, 25% width */
+  }
+
+  .binaryOrders {
+    grid-area: 136 / 1 / 201 / 201; /* 25% height, 75% width */
+    z-index: 2;
+  }
+
+  /* When Orders is collapsed */
+  .binaryContainerOrdersCollapsed {
+    .binaryTicker {
+      grid-area: 2 / 1 / 18 / 160;
+    }
+    .binaryChart {
+      grid-area: 19 / 1 / 198 / 160; /* 95% height, 50% width */
+    }
+    .binaryOrder {
+      grid-area: 2 / 160 / 198 / 201; /* 50% height, 25% width */
+    }
+
+    .binaryOrders {
+      grid-area: 199 / 1 / 201 / 201; /* 25% height, 75% width */
+      z-index: 2;
+    }
+    .collapseBinaryOrdersButton {
+      grid-area: 198 / 1 / 198 / 201; /* Positioned right above Orders and Trades */
+    }
+  }
+
+  .binaryContainerOrdersOrderCollapsed {
+    .binaryTicker {
+      grid-area: 2 / 1 / 18 / 200;
+    }
+    .binaryChart {
+      grid-area: 19 / 1 / 198 / 200; /* Chart takes Orders' height */
+    }
+    .binaryOrder {
+      grid-area: 2 / 200 / 201 / 201; /* Order takes Orders' height */
+    }
+    .binaryOrders {
+      grid-area: 199 / 1 / 201 / 200; /* Orders' height becomes minimal */
+    }
+    .collapseBinaryOrdersButton {
+      grid-area: 198 / 1 / 198 / 201; /* Positioned right above Orders and Trades */
+    }
+  }
+}
+
+/* Medium Devices, Desktops */
+@media only screen and (min-width: 769px) and (max-width: 1024px) {
+  .binaryTicker {
+    grid-area: 2 / 1 / 18 / 165;
+  }
+  .binaryChart {
+    grid-area: 19 / 1 / 135 / 165; /* 95% height, 50% width */
+  }
+
+  .binaryOrder {
+    grid-area: 2 / 165 / 201 / 201; /* 50% height, 25% width */
+  }
+
+  .binaryOrders {
+    grid-area: 136 / 1 / 201 / 165; /* 25% height, 75% width */
+    z-index: 2;
+  }
+
+  /* When Orders is collapsed */
+  .binaryContainerOrdersCollapsed {
+    .binaryTicker {
+      grid-area: 2 / 1 / 18 / 160;
+    }
+    .binaryChart {
+      grid-area: 19 / 1 / 198 / 160; /* 95% height, 50% width */
+    }
+
+    .binaryOrder {
+      grid-area: 2 / 160 / 198 / 201; /* 50% height, 25% width */
+    }
+
+    .binaryOrders {
+      grid-area: 199 / 1 / 201 / 201; /* 25% height, 75% width */
+      z-index: 2;
+    }
+    .collapseBinaryOrdersButton {
+      grid-area: 198 / 1 / 198 / 201; /* Positioned right above Orders and Trades */
+    }
+  }
+
+  .binaryContainerOrdersOrderCollapsed {
+    .binaryTicker {
+      grid-area: 2 / 1 / 18 / 200;
+    }
+    .binaryChart {
+      grid-area: 19 / 1 / 198 / 200; /* Chart takes Orders' height */
+    }
+    .binaryOrder {
+      grid-area: 2 / 200 / 201 / 201; /* Order takes Orders' height */
+    }
+    .binaryOrders {
+      grid-area: 199 / 1 / 201 / 200; /* Orders' height becomes minimal */
+    }
+    .collapseBinaryOrdersButton {
+      grid-area: 198 / 1 / 198 / 201; /* Positioned right above Orders and Trades */
+    }
+  }
+}
+
+/* Large Devices, Wide Screens */
+@media only screen and (min-width: 1025px) and (max-width: 1200px) {
+  .binaryTicker {
+    grid-area: 2 / 1 / 18 / 170;
+  }
+  .binaryChart {
+    grid-area: 19 / 1 / 135 / 170; /* 95% height, 50% width */
+  }
+
+  .binaryOrder {
+    grid-area: 2 / 170 / 201 / 201; /* 50% height, 25% width */
+  }
+
+  .binaryOrders {
+    grid-area: 136 / 1 / 201 / 170; /* 25% height, 75% width */
+    z-index: 2;
+  }
+}
+
+/* Extra Large Devices, Wide Screens */
+@media only screen and (min-width: 1201px) {
+  /* Your CSS */
+}
+
+.changelog ul,
+.changelog ol {
+  list-style-type: disc;
+  list-style-position: inside;
+}
+.post-body h1,
+.post-body h2,
+.post-body h3,
+.post-body h4,
+.post-body h5,
+.post-body h6 {
+  font-weight: bold;
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+  color: #333;
+  font-size: 2.5rem;
+}
+
+.post-body h2 {
+  font-size: 2rem;
+  color: #555;
+  margin-top: 1.5rem;
+}
+
+.post-body h3 {
+  font-size: 1.75rem;
+  margin-top: 1rem;
+}
+
+.post-body h4 {
+  font-size: 1.5rem;
+  color: #666;
+}
+
+.post-body h5,
+.post-body h6 {
+  font-size: 1.25rem;
+  color: #666;
+}
+
+.post-body div {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.post-body strong {
+  font-weight: bold;
+}
+
+.post-body p {
+  margin-bottom: 1rem;
+}
+
+.post-body a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.post-body a:hover {
+  text-decoration: underline;
+}
+
+.post-body blockquote {
+  border-left: 4px solid #ddd;
+  padding-left: 1rem;
+  margin-left: 0;
+  color: #777;
+}
+
+.post-body blockquote p {
+  margin-bottom: 0;
+  font-style: italic;
+  color: #111827;
+  font-weight: 500;
+}
+
+.post-body blockquote p:before {
+  content: open-quote;
+}
+.post-body blockquote p:after {
+  content: close-quote;
+}
+
+.post-body ul,
+.post-body ol {
+  list-style-type: disc;
+  margin-top: 1.25em;
+  margin-bottom: 1.25em;
+  padding-left: 1.625em;
+}
+
+.post-body li {
+  margin-bottom: 0.5rem;
+}
+
+.post-body pre {
+  background-color: #f9f9f9;
+  padding: 1rem;
+  overflow: auto;
+  margin: 1rem 0;
+}
+
+.post-body code {
+  font-family: monospace;
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+  margin: 1rem 0;
+}
+
+.post-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+}
+
+.post-body th,
+.post-body td {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.post-body th {
+  background-color: #f5f5f5;
+}
+
+.post-body img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 1rem auto;
+}
+
+.post-body em {
+  font-style: italic;
+}
+
+.post-body del {
+  text-decoration: line-through;
+}
+
+.post-body hr {
+  border: none;
+  border-top: 1px solid #ddd;
+  margin: 2rem 0;
+}
+
+/* Dark Theme Styles */
+.dark .post-body h1,
+.dark .post-body h2,
+.dark .post-body h3,
+.dark .post-body h4,
+.dark .post-body h5,
+.dark .post-body h6 {
+  color: #f1f1f1;
+}
+
+.dark .post-body div,
+.dark .post-body p {
+  color: #ccc;
+}
+
+.dark .post-body a {
+  color: #58a6ff;
+}
+
+.dark .post-body blockquote {
+  border-left: 4px solid #555;
+  color: #888;
+}
+
+.dark .post-body blockquote p {
+  color: #f1f1f1;
+}
+
+.dark .post-body pre {
+  background-color: #333;
+}
+
+.dark .post-body code {
+  background-color: #333;
+  color: #f1f1f1;
+}
+
+.dark .post-body th,
+.dark .post-body td {
+  border: 1px solid #555;
+}
+
+.dark .post-body th {
+  background-color: #444;
+}
+
+.dark .post-body hr {
+  border-top: 1px solid #555;
+}

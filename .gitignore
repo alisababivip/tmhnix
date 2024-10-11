@@ -1,0 +1,14 @@
+node_modules
+*.log
+*.zip
+.nuxt
+nuxt.d.ts
+.output
+.env
+*Zone.Identifier
+.demo
+.app/.output
+.app/.nuxt
+.app/node_modules
+.app/.env
+.app/public

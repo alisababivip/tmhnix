@@ -1,0 +1,23 @@
+[0;1;31m●[0m scylla-server.service - Scylla Server
+     Loaded: loaded (/lib/systemd/system/scylla-server.service; disabled; vendor preset: enabled)
+    Drop-In: /etc/systemd/system/scylla-server.service.d
+             └─capabilities.conf, dependencies.conf, sysconfdir.conf
+     Active: [0;1;31mfailed[0m (Result: exit-code) since Sun 2024-01-21 09:42:35 +07; 18s ago
+    Process: 623462 ExecStartPre=/opt/scylladb/scripts/scylla_prepare (code=exited, status=0/SUCCESS)
+    Process: 623477 ExecStart=/usr/bin/scylla $SCYLLA_ARGS $SEASTAR_IO $DEV_MODE $CPUSET $MEM_CONF [0;1;31m(code=exited, status=1/FAILURE)[0m
+    Process: 623497 ExecStopPost=/opt/scylladb/scripts/scylla_stop (code=exited, status=0/SUCCESS)
+   Main PID: 623477 (code=exited, status=1/FAILURE)
+
+Jan 21 09:42:35 tmhnix.com scylla[623477]:  [shard 1] seastar - updated: blocked-reactor-notify-ms=1000000
+Jan 21 09:42:35 tmhnix.com scylla[623477]:  [shard 0] init - installing SIGHUP handler
+Jan 21 09:42:35 tmhnix.com scylla[623477]:  [shard 0] init - Scylla version 5.2.13-0.20240103.c57a0a7a46c6 with build-id 315a01c51465f3304f5dfa743e62ff51f3650ffe starting ...
+Jan 21 09:42:35 tmhnix.com scylla[623477]: [0;1;31m[0;1;39m[0;1;31m [shard 0] init - I/O Scheduler is not properly configured! This is a non-supported setup, and performance is expected to be unpredictably bad.[0m
+                                           [0;1;31m Reason found: none of --max-io-requests, --io-properties and --io-properties-file are set.[0m
+                                           [0;1;31mTo properly configure the I/O Scheduler, run the scylla_io_setup utility shipped with Scylla.[0m
+                                           [0;1;31mTo ignore this, see the developer-mode configuration option.[0m
+Jan 21 09:42:35 tmhnix.com scylla[623477]:  [shard 0] init - Shutting down sighup
+Jan 21 09:42:35 tmhnix.com scylla[623477]:  [shard 0] init - Shutting down sighup was successful
+Jan 21 09:42:35 tmhnix.com scylla[623477]: [0;1;31m[0;1;39m[0;1;31m [shard 0] init - Startup failed: std::runtime_error (Bad I/O Scheduler configuration)[0m
+Jan 21 09:42:35 tmhnix.com systemd[1]: [0;1;39m[0;1;31m[0;1;39mscylla-server.service: Main process exited, code=exited, status=1/FAILURE[0m
+Jan 21 09:42:35 tmhnix.com systemd[1]: [0;1;38;5;185m[0;1;39m[0;1;38;5;185mscylla-server.service: Failed with result 'exit-code'.[0m
+Jan 21 09:42:35 tmhnix.com systemd[1]: [0;1;31m[0;1;39m[0;1;31mFailed to start Scylla Server.[0m

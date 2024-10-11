@@ -1,0 +1,56 @@
+[
+  {
+    "code": "en",
+    "iso": "en-US",
+    "file": "en.json",
+    "dir": "ltr",
+    "name": "English",
+    "flag": "/img/icons/flags/united-states-of-america.svg",
+    "status": 1
+  },
+  {
+    "code": "fr",
+    "iso": "fr-FR",
+    "file": "fr.json",
+    "dir": "ltr",
+    "name": "Français",
+    "flag": "/img/icons/flags/france.svg",
+    "status": 0
+  },
+  {
+    "code": "es",
+    "iso": "es-ES",
+    "file": "es.json",
+    "dir": "ltr",
+    "name": "Español",
+    "flag": "/img/icons/flags/spain.svg",
+    "status": 0
+  },
+  {
+    "code": "de",
+    "iso": "de-DE",
+    "file": "de.json",
+    "dir": "ltr",
+    "name": "Deutsch",
+    "flag": "/img/icons/flags/germany.svg",
+    "status": 0
+  },
+  {
+    "code": "mx",
+    "iso": "es-MX",
+    "file": "mx.json",
+    "dir": "ltr",
+    "name": "Español (México)",
+    "flag": "/img/icons/flags/mexico.svg",
+    "status": 0
+  },
+  {
+    "code": "cn",
+    "iso": "zh-CN",
+    "file": "cn.json",
+    "dir": "ltr",
+    "name": "中文",
+    "flag": "/img/icons/flags/china.svg",
+    "status": 0
+  }
+]
