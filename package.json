@@ -1,12 +1,12 @@
 {
   "private": true,
   "name": "bicrypto",
-  "version": "3.4.3",
+  "version": "^4.0.0",
   "type": "commonjs",
   "main": "./nuxt.config.ts",
   "engines": {
-    "node": ">=18",
-    "pnpm": ">=8"
+    "node": ">=20",
+    "pnpm": ">=9"
   },
   "prisma": {
     "seed": "node ./prisma/seed/seed.mjs"
